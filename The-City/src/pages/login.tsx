@@ -13,10 +13,10 @@ type FieldsType = {
 };
 
 const fields: FieldsType = {
-  revealAgeAbove18: false,
-  revealGender: false,
+  revealAgeAbove18: true,
+  revealGender: true,
   revealPinCode: false,
-  revealState: false,
+  revealState: true,
 };
 
 const getFieldsToReveal = (): FieldKey[] => {
@@ -26,6 +26,7 @@ const getFieldsToReveal = (): FieldKey[] => {
       revealedFields.push(key as FieldKey);
     }
   }
+  console.log(revealedFields)
   return revealedFields;
 };
 
@@ -37,6 +38,7 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     if (anonAadhaar.status === "logged-in") {
+      console.log(anonAadhaar)
       navigate('/'); 
     } else {
       setLoading(false);
