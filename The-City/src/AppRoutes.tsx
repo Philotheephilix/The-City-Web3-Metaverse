@@ -1,7 +1,7 @@
 // src/routes/index.tsx
 import React from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import BaseLayout from '../components/layouts/BaseLayout';
+import BaseLayout from './components/layouts/BaseLayout';
 import Login from './pages/login';
 import Home from './pages/Homepage'
 const AppRoutes: React.FC = () => {
