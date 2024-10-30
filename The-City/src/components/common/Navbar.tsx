@@ -61,7 +61,7 @@ const Navbar: React.FC = () => {
             </button>
           ) : (
             <Link
-              to="/pages/Login"
+              to="/Login"
               className="hover:text-gray-200"
               style={{
                 backgroundColor: "white",

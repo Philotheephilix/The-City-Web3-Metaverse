@@ -11,11 +11,9 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({ children, location }) => {
 
   return (
     <div className="min-h-screen ">
-      {!hideNavbarFooter && <Navbar />}
       <main className="  ">
         {children}
       </main>
-      {!hideNavbarFooter && <Footer />}
     </div>
   );
 };
