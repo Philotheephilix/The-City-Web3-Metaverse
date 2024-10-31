@@ -1,0 +1,40 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "/home/philo/Documents/GitHub/The-City-Web3-Metaverse/The-City/contracts/crud.sol": {
+      "lastModificationDate": 1730353946042,
+      "contentHash": "7f6e50423a92c078b8cb022e4e565fd0",
+      "sourceName": "contracts/crud.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "TodoList"
+      ]
+    }
+  }
+}

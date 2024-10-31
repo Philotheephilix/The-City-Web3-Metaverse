@@ -1,5 +1,4 @@
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import { Card } from "@/components/ui/card"
 
 const data = [
   { name: '00:00', water: 400, electricity: 240 },
