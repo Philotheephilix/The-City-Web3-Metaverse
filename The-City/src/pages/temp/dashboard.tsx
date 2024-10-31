@@ -117,7 +117,7 @@ export default function Dashboard() {
           </ul>
           <div className="absolute bottom-4 left-4 right-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-400">User Role</span>
+              <span className="text-sm text-gray-400">{localStorage.getItem('username')}</span>
               <div className="flex items-center space-x-2">
                 <Switch
                   checked={userRole === 'admin'}
