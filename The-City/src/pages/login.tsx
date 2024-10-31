@@ -40,6 +40,7 @@ const Login: React.FC = () => {
     if (anonAadhaar.status === "logged-in") {
       console.log(anonAadhaar)
       navigate('/'); 
+      
     } else {
       setLoading(false);
     }

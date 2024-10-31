@@ -1,12 +1,13 @@
 "use client"
-
+import { useNavigate } from "react-router-dom"
 import { useState } from 'react'
-import { Moon, Sun, BarChart3, Droplets, Wind, Shield, Zap, DollarSign, PieChart, UserCog, Menu } from 'lucide-react'
+import { Moon, Sun, BarChart3, Droplets, Wind, Shield, Zap, DollarSign, PieChart, UserCog, Menu, Hospital } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,14 +23,16 @@ import SafetyAlerts from './SafetyAlerts'
 import EnergyUsage from './EnergyUsage'
 import FinancialModule from './FinancialModule'
 import DataAnalytics from './DataAnalytics'
-
+import MapPreview from "@/components/map/TrafficMap"
+import { Label } from "recharts"
 export default function Dashboard() {
   const [isDarkMode, setIsDarkMode] = useState(true)
   const [userRole, setUserRole] = useState('admin')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const navigate = useNavigate()
 
   const handleLogin = () => {
-    // Simulating login process
+    navigate('/Login')
     setIsLoggedIn(true)
   }
 
@@ -47,7 +50,7 @@ export default function Dashboard() {
             <Button variant="ghost" size="icon" className="md:hidden mr-2">
               <Menu className="h-5 w-5" />
             </Button>
-            <h1 className="text-2xl font-bold text-gray-800 dark:text-white">CityVerse</h1>
+            <h1 className="text-2xl font-bold text-gray-800 dark:text-white"></h1>
           </div>
           <div className="flex items-center space-x-4">
             <Button
@@ -91,18 +94,23 @@ export default function Dashboard() {
         <nav className="w-64 bg-gray-900 text-white p-4 hidden md:block">
           <ul className="space-y-2">
             {[
-              { icon: BarChart3, label: 'Traffic' },
-              { icon: Droplets, label: 'Utilities' },
-              { icon: Wind, label: 'Air Quality' },
-              { icon: Shield, label: 'Public Safety' },
-              { icon: Zap, label: 'Energy Use' },
-              { icon: DollarSign, label: 'Financial' },
-              { icon: PieChart, label: 'Analytics' },
-            ].map(({ icon: Icon, label }) => (
-              <li key={label}>
-                <Button variant="ghost" className="w-full justify-start">
-                  <Icon className="mr-2 h-4 w-4" />
-                  {label}
+             { icon: BarChart3, label: 'Traffic', path: '/traffic-map-preview' },
+             { icon: Droplets, label: 'Utilities', path: '/utilities' },
+             { icon: Wind, label: 'Air Quality', path: '/air-quality' },
+             { icon: Shield, label: 'Public Safety', path: '/public-safety' },
+             { icon: Zap, label: 'Energy Use', path: '/energy-use' },
+             { icon: DollarSign, label: 'Financial', path: '/financial' },
+             { icon: PieChart, label: 'Analytics', path: '/analytics' },
+             { icon: Hospital, label: 'Medical History', path: '/medical' }
+           ].map(({ icon: Icon, label, path }) => (
+             <li key={label}>
+               <Button
+                 variant="ghost"
+                 className="w-full justify-start"
+                 onClick={() => navigate(path)}
+               >
+                 <Icon className="mr-2 h-4 w-4" />
+                 {label}
                 </Button>
               </li>
             ))}
@@ -132,7 +140,7 @@ export default function Dashboard() {
               
               {/* Dashboard Widgets */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <Card>
+                <Card onClick={() => navigate('traffic-map-preview')}>
                   <CardHeader>
                     <CardTitle>Traffic Flow</CardTitle>
                     <CardDescription>Real-time city traffic map</CardDescription>
