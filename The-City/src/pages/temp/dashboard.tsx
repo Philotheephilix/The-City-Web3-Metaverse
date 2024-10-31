@@ -94,11 +94,11 @@ export default function Dashboard() {
         <nav className="w-64 bg-gray-900 text-white p-4 hidden md:block">
           <ul className="space-y-2">
             {[
-             { icon: BarChart3, label: 'Traffic', path: '/traffic-map-preview' },
+             { icon: BarChart3, label: 'Traffic', path: '/traffic' },
              { icon: Droplets, label: 'Utilities', path: '/utilities' },
-             { icon: Wind, label: 'Air Quality', path: '/air-quality' },
+             { icon: Wind, label: 'Air Quality', path: '/air' },
              { icon: Shield, label: 'Public Safety', path: '/public-safety' },
-             { icon: Zap, label: 'Energy Use', path: '/energy-use' },
+             { icon: Zap, label: 'Energy Use', path: '/energy' },
              { icon: DollarSign, label: 'Financial', path: '/financial' },
              { icon: PieChart, label: 'Analytics', path: '/analytics' },
              { icon: Hospital, label: 'Medical History', path: '/medical' }
