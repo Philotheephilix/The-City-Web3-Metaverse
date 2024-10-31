@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { LogInWithAnonAadhaar, useAnonAadhaar } from '@anon-aadhaar/react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'
+import { API_URL } from '@/constants';
 
 type FieldKey =
   | 'revealAgeAbove18'
@@ -41,6 +43,12 @@ const Login: React.FC = () => {
     if (anonAadhaar.status === "logged-in") {
       localStorage.setItem('username', username);
       console.log(anonAadhaar)
+      const newUser={
+        username:username,
+        anonid:anonAadhaar.anonAadhaarProofs,
+        role:'citizen'
+      }
+      axios.post(`${API_URL}/users`,newUser)
       navigate('/'); 
       
     } else {

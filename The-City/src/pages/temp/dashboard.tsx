@@ -1,6 +1,6 @@
 "use client"
 import { useNavigate } from "react-router-dom"
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Moon, Sun, BarChart3, Droplets, Wind, Shield, Zap, DollarSign, PieChart, UserCog, Menu, Hospital } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -23,22 +23,31 @@ import SafetyAlerts from './SafetyAlerts'
 import EnergyUsage from './EnergyUsage'
 import FinancialModule from './FinancialModule'
 import DataAnalytics from './DataAnalytics'
-import MapPreview from "@/components/map/TrafficMap"
-import { Label } from "recharts"
 export default function Dashboard() {
   const [isDarkMode, setIsDarkMode] = useState(true)
   const [userRole, setUserRole] = useState('admin')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const navigate = useNavigate()
-
+  
+  useEffect(() => {
+    const storedUser = localStorage.getItem('anonAadhaar');
+    const user = storedUser ? JSON.parse(storedUser) : {};
+    if (user && user.status === 'logged-in') {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
   const handleLogin = () => {
     navigate('/Login')
     setIsLoggedIn(true)
   }
 
   const handleLogout = () => {
-    // Simulating logout process
+    localStorage.removeItem('username')
+    localStorage.removeItem('anonAadhaar')
     setIsLoggedIn(false)
+    navigate('/Login')
   }
 
   return (
@@ -74,8 +83,7 @@ export default function Dashboard() {
                 <DropdownMenuContent className="w-56" align="end" forceMount>
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">John Doe</p>
-                      <p className="text-xs leading-none text-muted-foreground">john@example.com</p>
+                      <p className="text-sm font-medium leading-none">{localStorage.getItem('username')}</p>
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
