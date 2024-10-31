@@ -33,18 +33,20 @@ const getFieldsToReveal = (): FieldKey[] => {
 const Login: React.FC = () => {
   const [anonAadhaar] = useAnonAadhaar();
   const [loading, setLoading] = useState(true);
+  const [username, setUsername] = useState('');
   const navigate = useNavigate();
   const fieldsToReveal = getFieldsToReveal();
 
   useEffect(() => {
     if (anonAadhaar.status === "logged-in") {
+      localStorage.setItem('username', username);
       console.log(anonAadhaar)
       navigate('/'); 
       
     } else {
       setLoading(false);
     }
-  }, [anonAadhaar.status, navigate]);
+  }, [anonAadhaar.status, username, navigate]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -52,17 +54,21 @@ const Login: React.FC = () => {
 
   return (
     <div className='login flex'>
-      <div style={{backgroundColor:"#D7C5A8",height:"100vh",width:"50vw",display:"flex",justifyContent:"center",alignItems:"center",flexDirection:"column"}}>
-        {/* <img src={logo} alt="" style={{
-          height:"50vh",width:"25vw"
-        }}/> */} 
+      <div className='bg-gray-900' style={{height:"100vh",width:"50vw",display:"flex",justifyContent:"center",alignItems:"center",flexDirection:"column"}}>
         <div style={{display:"flex",justifyContent:"center",alignItems:"center",flexDirection:"column"}}>
-          <div style={{color:"#73114B",fontSize:"18px",fontWeight:"500"}}>Log in to start mastering new skills and earn rewards</div>
-            <div style={{color:"#73114B",fontSize:"15px",fontWeight:"100"}}>Join the Community now </div>
-          </div>
+          <div style={{color:"#fff",fontSize:"21px",fontWeight:"500"}}>Step into the Web3 Metaverse: Where your imagination builds the future!</div>
+          <div style={{color:"#fff",fontSize:"19px",fontWeight:"300"}}>With great decentralization comes great innovation</div>
         </div>
-      <div className='login--component gap-6  ' style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width: "50vw" }}>
-        <input type="text" name='login--username' placeholder='Enter Username ' className='h-[6vh] border  p-2 shadow-lg rounded-lg'/>
+      </div>
+      <div className='login--component bg-gray-800 gap-6' style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width: "50vw" }}>
+        <input 
+          type="text" 
+          name='login--username' 
+          placeholder='Enter Username ' 
+          className='h-[6vh] border p-2 shadow-lg rounded-lg'
+          value={username}
+          onChange={(e) => setUsername(e.target.value)} 
+        />
         <div className='login--anon'>
           <LogInWithAnonAadhaar
             nullifierSeed={123}
