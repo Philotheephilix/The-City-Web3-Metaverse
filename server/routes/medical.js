@@ -14,23 +14,22 @@ router.post('/med', async (req, res) => {
       res.status(400).json({ message: error.message });
     }
   });
-
-
-  router.get('/med/:id', async (req, res) => {
-    const { id } = req.params; 
-  
+  router.post('/medi', async (req, res) => {
+    const { anonid } = req.body;
     try {
-      const db = getDB();
-      const medCollection = db.collection('med');
-      const record = await medCollection.findOne({ anonid: id }); 
-  
-      if (!record) {
-        return res.status(404).json({ message: 'Record not found' });
-      }
-  
-      res.status(200).json(record);
+        console.log(anonid)
+        const db = getDB();
+        const medCollection = db.collection('med');
+        const records = await medCollection.find({ userId: anonid }).toArray();
+        if (records.length === 0) {
+            return res.status(404).json({ message: 'Record not found' });
+        }
+        res.status(200).json(records);
     } catch (error) {
-      res.status(400).json({ message: error.message });
+        console.log(error);
+        res.status(400).json({ message: error.message });
     }
-  });
+});
+
+  
   module.exports = router; 
