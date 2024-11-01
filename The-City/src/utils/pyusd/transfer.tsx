@@ -44,7 +44,7 @@ interface PYUSDTransferProps {
     const [status, setStatus] = useState<TransferStatus | null>(null);
     const [isConnected, setIsConnected] = useState<boolean>(false);
   
-    const PYUSD_CONTRACT_ADDRESS = '0x5fbdb2315678afecb367f032d93f642f64180aa3';
+    const PYUSD_CONTRACT_ADDRESS = '0xf290590D47c81820427A108Ce6363607a03Aaf1b';
     console.log(initialAmount,initialReceiverAddress)
     useEffect(() => {
       checkIfWalletIsConnected();
