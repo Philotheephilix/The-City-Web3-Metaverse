@@ -1,21 +1,12 @@
 "use client"
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from 'react'
-import { Moon, Sun, BarChart3, Droplets, Wind, Shield, Zap, DollarSign, PieChart, UserCog, Menu, Hospital, CreditCard, AlertCircle, FileText, Activity, TrendingUp, IndianRupeeIcon } from 'lucide-react'
+import { BarChart3, Droplets, Wind, Shield, Zap, DollarSign, PieChart, UserCog, Hospital, CreditCard, AlertCircle, FileText, Activity, TrendingUp, IndianRupeeIcon } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import TrafficMap from './TrafficMap'
 import UtilitiesGraph from './UtilitiesGraph'
 import AirQualityHeatmap from './AirQualityHeatmap'
@@ -25,9 +16,8 @@ import FinancialModule from './FinancialModule'
 import DataAnalytics from './DataAnalytics'
 
 export default function Dashboard() {
-  const [isDarkMode, setIsDarkMode] = useState(true)
   const [userRole, setUserRole] = useState('admin')
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [, setIsLoggedIn] = useState(false)
   const navigate = useNavigate()
   
   useEffect(() => {
@@ -40,63 +30,10 @@ export default function Dashboard() {
     }
   }, []);
 
-  const handleLogin = () => {
-    navigate('/Login')
-    setIsLoggedIn(true)
-  }
-
-  const handleLogout = () => {
-    localStorage.removeItem('username')
-    localStorage.removeItem('anonAadhaar')
-    setIsLoggedIn(false)
-    navigate('/Login')
-  }
 
   return (
-    <div className={`flex flex-col h-screen ${isDarkMode ? 'dark' : ''}`}>
-      <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex items-center justify-between px-4 py-3">
-          <div className="flex items-center">
-            <Button variant="ghost" size="icon" className="md:hidden mr-2">
-              <Menu className="h-5 w-5" />
-            </Button>
-            <h1 className="text-2xl font-bold text-gray-800 dark:text-white">CityVerse Dashboard</h1>
-          </div>
-          <div className="flex items-center space-x-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsDarkMode(!isDarkMode)}
-              className="text-gray-600 dark:text-gray-300"
-            >
-              {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-            </Button>
-            {isLoggedIn ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src="/placeholder-user.jpg" alt="User" />
-                      <AvatarFallback className="text-white">S</AvatarFallback>
-                    </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56" align="end" forceMount>
-                  <DropdownMenuLabel className="font-normal">
-                    <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{localStorage.getItem('username')}</p>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <Button onClick={handleLogin}>Login</Button>
-            )}
-          </div>
-        </div>
-      </header>
+    <div className={`flex flex-col h-screen dark`}>
+
 
       <div className="flex flex-1 overflow-hidden">
         {/* Navigation Sidebar */}
