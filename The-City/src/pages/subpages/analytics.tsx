@@ -96,8 +96,13 @@ const fetchTransactionDetails = async (hash: string): Promise<TransactionDetails
   }
 };
 
-export default function CombinedAnalyticsPage() {
-  const { address } = useParams<{ address: string }>();
+  interface CombinedAnalyticsPageProps {
+    addresss: string;
+  }
+  
+  const CombinedAnalyticsPage: React.FC<CombinedAnalyticsPageProps> = ({ addresss }) => {
+    const address = addresss || useParams<{ address: string }>().address;
+  
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
@@ -157,8 +162,8 @@ export default function CombinedAnalyticsPage() {
               <h1 className="text-2xl font-bold text-white">Transaction History & Analytics</h1>
               <p className="mt-2 text-sm text-blue-600">Address: {address}</p>
             </div>
-            <Button  className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-800 transition-colors">
-              NOVES
+            <Button  className="px-4 py-2 bg-slate-900 border-white text-white rounded-md hover:bg-slate-800 transition-colors">
+              NOVES API
             </Button>
           </div>
         </div>
@@ -249,3 +254,4 @@ export default function CombinedAnalyticsPage() {
     </div>
   );
 }
+export default CombinedAnalyticsPage;

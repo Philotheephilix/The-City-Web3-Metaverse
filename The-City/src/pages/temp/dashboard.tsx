@@ -12,7 +12,6 @@ import UtilitiesGraph from './UtilitiesGraph'
 import AirQualityHeatmap from './AirQualityHeatmap'
 import SafetyAlerts from './SafetyAlerts'
 import EnergyUsage from './EnergyUsage'
-import FinancialModule from './FinancialModule'
 import DataAnalytics from './DataAnalytics'
 import axios from "axios";
 
@@ -44,7 +43,7 @@ const fetchTransactionHistory = async (address: string): Promise<Transaction[]> 
 export default function Dashboard() {
   const [userRole, setUserRole] = useState('admin')
   const [, setIsLoggedIn] = useState(false)
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [, setTransactions] = useState<Transaction[]>([]);
   const navigate = useNavigate()
   
   useEffect(() => {
@@ -235,49 +234,13 @@ export default function Dashboard() {
               </div>
 
               {/* Financial Module */}
-              <Card onClick={()=>{navigate('analytics')}}>
+              <Card>
                   <CardHeader>
                     <CardTitle>Recent Transactions</CardTitle>
                     <CardDescription>Your latest transaction activity.</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    {transactions.length ? (
-                      <div className="overflow-x-auto bg-black">
-                        <table className="min-w-full divide-y divide-gray-200 bg-black border rounded-md">
-                          <thead className="bg-black text-center">
-                            <tr>
-                              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Transaction Hash
-                              </th>
-                              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Block Number
-                              </th>
-                              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Timestamp
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody className="bg-black divide-y divide-gray-600">
-                            {transactions.map((tx) => (
-                              <tr key={tx.transactionHash} className="hover:bg-gray-800 text-center">
-                                <td className="px-6 py-4 whitespace-nowrap ">
-                                  <div className="flex items-center">
-                                    <button className="text-blue-600 font-medium hover:underline">
-                                      {tx.transactionHash.slice(0, 10)}...{tx.transactionHash.slice(-8)}
-                                    </button>
-                                  </div>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-gray-500">{tx.blockNumber}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-gray-500">{formatTimestamp(tx.timestamp)}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                            <button>view more</button>
-                      </div>
-                    ) : (
-                      <div className="text-center text-gray-400">No transaction data available.</div>
-                    )}
+                    <CombinedAnalyticsPage addresss={localStorage.getItem('eth-add') || ''} />
                   </CardContent>
                 </Card>
 
@@ -346,6 +309,3 @@ export default function Dashboard() {
     </div>
   )
 }
-const formatTimestamp = (timestamp: number) => {
-  return new Date(timestamp * 1000).toLocaleString();
-};
