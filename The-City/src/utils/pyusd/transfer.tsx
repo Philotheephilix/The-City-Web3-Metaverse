@@ -6,10 +6,6 @@ interface PYUSDTransferProps {
   initialReceiverAddress?: string;
   initialAmount?: string;
 }
-// types.ts
-interface Window {
-    ethereum?: MetaMaskEthereumProvider;
-  }
   
   interface RequestArguments {
     method: string;

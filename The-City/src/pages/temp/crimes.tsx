@@ -217,7 +217,7 @@ export default function CrimesPage() {
                   fill="#8884d8"
                   dataKey="value"
                 >
-                  {crimeTypes.map((entry, index) => (
+                  {crimeTypes.map((_entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>

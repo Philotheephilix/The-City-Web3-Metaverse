@@ -4,7 +4,6 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import BaseLayout from './components/layouts/BaseLayout';
 import Login from './pages/login';
 import Dashboard from './pages/temp/dashboard';
-import ToDo from './test/ToDo'
 import MapPreview from './components/map/TrafficMap';
 import CreativeMedicalRecordsPage from './pages/MedicalHistory' ;
 import CrimesPage from './pages/temp/crimes';
@@ -17,6 +16,7 @@ import PYUSDTransfer from './utils/pyusd/transfer';
 import UserBillsPage from './pages/payments';
 import CombinedAnalyticsPage from './pages/subpages/analytics';
 import AnalyticsPage from './pages/subpages/markets';
+import ExpenditureVisual from './pages/Expenditure';
 const AppRoutes: React.FC = () => {
   const location = useLocation();
   return (
@@ -24,13 +24,14 @@ const AppRoutes: React.FC = () => {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/Login" element={<Login />} />
-        <Route path="/todo" element={<ToDo />} />
         <Route path="/traffic-map-preview" element={<MapPreview/>}/>
         <Route path="/medical" element={<CreativeMedicalRecordsPage/>}/>
         <Route path="/crime" element={<CrimesPage/>}/>
         <Route path="/energy" element={<EnergyConsumptionPage/>}/>
 
         <Route path="/public-safety" element={<PublicSafetyPage/>}/>
+
+        <Route path="/public-expenditure" element={<ExpenditureVisual/>}/>
 
         <Route path="/air" element={<AirQualityIndexPage/>}/>
         <Route path="/utilities" element={<UtilitiesUsagePage/>}/>

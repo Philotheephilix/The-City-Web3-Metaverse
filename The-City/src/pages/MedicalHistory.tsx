@@ -1,10 +1,10 @@
 "use client"
 
-import { useState, useRef, useEffect } from 'react'
-import { PlusCircle, FileText, Trash2, Upload, Image as ImageIcon, Share2, Loader2 } from 'lucide-react'
-import { motion, useAnimation } from 'framer-motion'
+import { useState, useEffect } from 'react'
+import { FileText, Image as ImageIcon, Share2 } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -43,45 +43,11 @@ type MedicalRecord = {
   userId:String
 }
 
-const HealthAnimation = () => {
-  const circleRef = useRef<SVGCircleElement>(null)
-  const controls = useAnimation()
-
-  useEffect(() => {
-    controls.start({
-      scale: [1, 1.2, 1],
-      transition: { duration: 2, repeat: Infinity }
-    })
-  }, [controls])
-
-  return (
-    <svg width="150" height="150" viewBox="0 0 150 150" className="absolute top-4 right-4 opacity-50">
-      <motion.circle
-        ref={circleRef}
-        cx="50"
-        cy="50"
-        r="45"
-        stroke="white"
-        strokeWidth="2"
-        fill="none"
-        animate={controls}
-      />
-      <path
-        d="M50 30 L50 70 M30 50 L70 50"
-        stroke="white"
-        strokeWidth="6"
-        fill="none"
-      />
-    </svg>
-  )
-}
 
 export default function CreativeMedicalRecordsPage() {
   const [records, setRecords] = useState<MedicalRecord[]>([])
   const [newTextRecord, setNewTextRecord] = useState({ title: '', content: '' })
-  const [newImageRecord, setNewImageRecord] = useState<File | null>(null)
   const [showQR, setShowQR] = useState(false)
-  const [isUploading, setIsUploading] = useState(false)
   let anonid = localStorage.getItem('userId')?localStorage.getItem('userId'):"";
 
 
@@ -98,78 +64,9 @@ export default function CreativeMedicalRecordsPage() {
 
     fetchRecords();
   }, []);
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      setIsUploading(true)
-      setTimeout(async () => {
-        const newRecord: MedicalRecord = {
-          id: Date.now().toString(),
-          name: file.name,
-          date: new Date().toISOString().split('T')[0],
-          type: file.type.split('/')[1].toUpperCase(),
-          size: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
-          userId: anonid?anonid:""
-        }
-        console.log(newRecord)
-        await axios.post(`${API_URL}/med`,newRecord);
-        setRecords([...records, newRecord])
-        setIsUploading(false)
-      }, 2000) // Simulating upload delay
-    }
-  }
-
-  const handleTextRecordSubmit = async () => {
-    if (newTextRecord.title && newTextRecord.content) {
-      const newRecord: MedicalRecord = {
-        id: Date.now().toString(),
-        name: newTextRecord.title,
-        date: new Date().toISOString().split('T')[0],
-        type: 'TEXT',
-        size: `${newTextRecord.content.length} chars`,
-        content: newTextRecord.content,
-        userId:anonid?anonid:"",
-      }
-      await axios.post(`${API_URL}/med`,newRecord);
-      setRecords([...records, newRecord])
-      setNewTextRecord({ title: '', content: '' })
-    }
-  }
-
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      setNewImageRecord(file)
-    }
-  }
-
-  const handleImageRecordSubmit = () => {
-    if (newImageRecord) {
-      setIsUploading(true)
-      setTimeout(() => {
-        const newRecord: MedicalRecord = {
-          id: Date.now().toString(),
-          name: newImageRecord.name,
-          date: new Date().toISOString().split('T')[0],
-          type: 'IMAGE',
-          size: `${(newImageRecord.size / (1024 * 1024)).toFixed(1)} MB`,
-          imageUrl: URL.createObjectURL(newImageRecord),
-          userId: anonid?anonid:""
-        }
-        setRecords([...records, newRecord])
-        setNewImageRecord(null)
-        setIsUploading(false)
-      }, 2000) // Simulating upload delay
-    }
-  }
-
-  const deleteRecord = (id: string) => {
-    setRecords(records.filter(record => record.id !== id))
-  }
 
   return (
     <div className="  px-48 py-8 relative bg-black">
-      <HealthAnimation />
       <motion.h1 
         className="text-4xl font-bold mb-6 text-white text-white"
         initial={{ opacity: 0, y: -20 }}
@@ -233,9 +130,7 @@ export default function CreativeMedicalRecordsPage() {
                 </div>
               </div>
             </CardContent>
-            <CardFooter  className='flex justify-center'>
-              <Button onClick={handleTextRecordSubmit}><PlusCircle className="mr-2 h-4 w-4" /> Add Text Record</Button>
-            </CardFooter>
+            
           </Card>
         </TabsContent>
         <TabsContent value="image">
