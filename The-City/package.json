@@ -16,9 +16,12 @@
   },
   "dependencies": {
     "@anon-aadhaar/react": "^2.4.0",
+    "@metamask/detect-provider": "^2.0.0",
     "@metamask/providers": "^18.1.1",
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "@nomiclabs/hardhat-waffle": "^2.0.6",
+    "@openzeppelin/contracts": "^5.1.0",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-dropdown-menu": "^2.1.2",

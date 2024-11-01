@@ -1,40 +1,42 @@
-// scripts/deploy.mjs
 import pkg from 'hardhat';
 const { ethers } = pkg;
-
 async function main() {
   try {
-    // Get the contract factory
-    const TodoList = await ethers.getContractFactory("TodoList");
-    
-    console.log("Deploying TodoList...");
-    const todoList = await TodoList.deploy();
-    await todoList.deployed();
-    
-    console.log("TodoList deployed to:", todoList.address);
-    
-    console.log("Waiting for block confirmations...");
-    await todoList.deployTransaction.wait(6);
-    
-    // Verify the contract
-    try {
-      console.log("Verifying contract on Etherscan...");
-      await pkg.run("verify:verify", {
-        address: todoList.address,
-        constructorArguments: [],
+      const [deployer] = await ethers.getSigners();
+      console.log("Deploying contracts with account:", deployer.address);
+
+      // Deploy contract
+      const PYUSD = await ethers.getContractFactory("PYUSD");
+      const pyusd = await PYUSD.deploy(deployer.address);
+      await pyusd.waitForDeployment();
+
+      const address = await pyusd.getAddress();
+      console.log("PYUSD deployed to:", address);
+
+      // Mint tokens to deployer
+      const mintAmount = ethers.parseUnits("100000", 6); // 1000 PYUSD
+      const mintTx = await pyusd.mint(deployer.address, mintAmount);
+      await mintTx.wait();
+      console.log(`Minted 1000 PYUSD to ${deployer.address}`);
+
+      // Verify balance
+      const balance = await pyusd.balanceOf(deployer.address);
+      console.log(`PYUSD Balance: ${ethers.formatUnits(balance, 6)}`);
+      
+      console.log({
+          token: address,
+          deployer: deployer.address,
+          balance: ethers.formatUnits(balance, 6)
       });
-    } catch (verifyError) {
-      console.log("Verification failed:", verifyError.message);
-    }
   } catch (error) {
-    console.error("Deployment failed:", error.message);
-    throw error;
+      console.error("Deployment failed:", error);
+      throw error;
   }
 }
 
 main()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  });
+    .then(() => process.exit(0))
+    .catch((error) => {
+        console.error(error);
+        process.exit(1);
+    });

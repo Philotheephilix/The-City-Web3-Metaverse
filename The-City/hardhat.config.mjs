@@ -1,6 +1,7 @@
-require("@nomicfoundation/hardhat-toolbox");
+import { defineConfig } from "hardhat/config";
+import "@nomicfoundation/hardhat-toolbox";
 
-module.exports = {
+export default defineConfig({
   solidity: {
     version: "0.8.20",
     settings: {
@@ -20,6 +21,6 @@ module.exports = {
     }
   },
   paths: {
-    artifacts: './artifacts',
+    artifacts: './frontend/src/artifacts',
   }
-};
+});
