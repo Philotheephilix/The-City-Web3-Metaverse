@@ -12,7 +12,6 @@ import UtilitiesGraph from './UtilitiesGraph'
 import AirQualityHeatmap from './AirQualityHeatmap'
 import SafetyAlerts from './SafetyAlerts'
 import EnergyUsage from './EnergyUsage'
-import FinancialModule from './FinancialModule'
 import DataAnalytics from './DataAnalytics'
 import axios from "axios";
 
@@ -44,7 +43,7 @@ const fetchTransactionHistory = async (address: string): Promise<Transaction[]> 
 export default function Dashboard() {
   const [userRole, setUserRole] = useState('admin')
   const [, setIsLoggedIn] = useState(false)
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [, setTransactions] = useState<Transaction[]>([]);
   const navigate = useNavigate()
   
   useEffect(() => {
@@ -310,6 +309,3 @@ export default function Dashboard() {
     </div>
   )
 }
-const formatTimestamp = (timestamp: number) => {
-  return new Date(timestamp * 1000).toLocaleString();
-};

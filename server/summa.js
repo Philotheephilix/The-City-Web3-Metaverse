@@ -1,4 +1,4 @@
-// const axios = require('axios');
+const axios = require('axios');
 
 // let config = {
 //   method: 'get',
@@ -20,23 +20,23 @@
 
 
 //down works
-// let config = {
-//   method: 'get',
-//   maxBodyLength: Infinity,
-//   url: 'https://rest.coinapi.io/v1/ohlcv/BINANCE_SPOT_NEO_BTC/history?period_id=15SEC',
-//   headers: { 
-//     'Accept': 'text/plain', 
-//     'X-CoinAPI-Key': '92080a06-9fbe-42ff-9cfd-425bf6709458'
-//   }
-// };
+let config = {
+  method: 'get',
+  maxBodyLength: Infinity,
+  url: 'https://rest.coinapi.io/v1/ohlcv/BINANCE_SPOT_APE_BUSD/history?period_id=5SEC',
+  headers: { 
+    'Accept': 'text/plain', 
+    'X-CoinAPI-Key': '92080a06-9fbe-42ff-9cfd-425bf6709458'
+  }
+};
 
-// axios.request(config)
-// .then((response) => {
-//   console.log(JSON.stringify(response.data));
-// })
-// .catch((error) => {
-//   console.log(error);
-// });
+axios.request(config)
+.then((response) => {
+  console.log(JSON.stringify(response.data));
+})
+.catch((error) => {
+  console.log(error);
+});
 
 
 // const axios = require('axios');

@@ -100,14 +100,14 @@ const prepareChartData = (transactions: Transaction[]): ChartDataPoint[] => {
   }))
 }
 
-const renderTransactions = (transactions: Transaction[], activeTab: "incoming" | "outgoing", walletAddress: string) => (
+const renderTransactions = (transactions: Transaction[], activeTab: "incoming" | "outgoing") => (
   <Table>
-    <TableHeader>
+    <TableHeader className="text-slate-300">
       <TableRow>
-        <TableHead>Date</TableHead>
-        <TableHead>From/To</TableHead>
-        <TableHead className="text-right">Amount (USD)</TableHead>
-        <TableHead className="text-right">Gas Fee (USD)</TableHead>
+        <TableHead className="text-slate-300">Date</TableHead>
+        <TableHead className="text-slate-300">From/To</TableHead>
+        <TableHead className="text-right text-slate-300">Amount (USD)</TableHead>
+        <TableHead className="text-right text-slate-300">Gas Fee (USD)</TableHead>
       </TableRow>
     </TableHeader>
     <TableBody>
@@ -245,8 +245,8 @@ export default function TransactionDashboard() {
     <div className="min-h-screen bg-gray-900 text-white p-8">
       <Card className="bg-gray-800 border-gray-700 mb-8">
         <CardHeader>
-          <CardTitle className="text-xl">Department Dashboard</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-xl text-slate-400">Department Dashboard</CardTitle>
+          <CardDescription className="text-slate-300">
             Viewing wallet for: 
             <select 
               value={activeDepartment.name} 
@@ -254,7 +254,7 @@ export default function TransactionDashboard() {
                 const selectedDept = DEPARTMENTS.find(dept => dept.name === e.target.value)
                 if (selectedDept) setActiveDepartment(selectedDept)
               }}
-              className="bg-gray-700 ml-2"
+              className="bg-gray-300 text-black ml-2 p-2 rounded-lg"
             >
               {DEPARTMENTS.map(dept => (
                 <option key={dept.walletAddress} value={dept.name}>
@@ -266,7 +266,7 @@ export default function TransactionDashboard() {
         </CardHeader>
       </Card>
       
-      <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as "incoming" | "outgoing")}>
+      <Tabs value={activeTab}  onValueChange={(val) => setActiveTab(val as "incoming" | "outgoing")}>
         <TabsList>
           <TabsTrigger value="incoming">Incoming</TabsTrigger>
           <TabsTrigger value="outgoing">Outgoing</TabsTrigger>
@@ -275,13 +275,13 @@ export default function TransactionDashboard() {
         <TabsContent value="incoming">
           {renderStats(incomingStats)}
           {renderChart(incoming)}
-          {renderTransactions(incoming, "incoming", activeDepartment.walletAddress)}
+          {renderTransactions(incoming, "incoming")}
         </TabsContent>
         
         <TabsContent value="outgoing">
           {renderStats(outgoingStats)}
           {renderChart(outgoing)}
-          {renderTransactions(outgoing, "outgoing", activeDepartment.walletAddress)}
+          {renderTransactions(outgoing, "outgoing")}
         </TabsContent>
       </Tabs>
     </div>
