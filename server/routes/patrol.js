@@ -6,7 +6,7 @@ router.post('/crime', async (req, res) => {
     const crimeData = req.body;
     try {
       const db = getDB();
-      const patrolCollection = db.collection('patrol');
+      const patrolCollection = db.collection('crime');
   
       const result = await patrolCollection.insertOne(crimeData);
       res.status(201).json({ _id: result.insertedId, ...crimeData });
@@ -14,12 +14,21 @@ router.post('/crime', async (req, res) => {
       res.status(400).json({ message: error.message });
     }
   });
-router.get('/crime', async (req, res) => {
+  router.get('/crime', async (req, res) => {
     try {
       const db = getDB();
-      const patrolCollection = db.collection('patrol');
-      const users = await patrolCollection.find({}).toArray();
-      res.status(200).json(users);
+      const crimeCollection = db.collection('crime');
+      const crimeTypesCollection = db.collection('crime_types');
+  
+      const [crimeData, crimeTypes] = await Promise.all([
+        crimeCollection.find({}).toArray(),
+        crimeTypesCollection.find({}).toArray()
+      ]);
+  
+      res.status(200).json({
+        crimeData,
+        crimeTypes
+      });
     } catch (error) {
       res.status(400).json({ message: error.message });
     }

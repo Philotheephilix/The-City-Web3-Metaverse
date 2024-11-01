@@ -40,20 +40,32 @@ const Login: React.FC = () => {
   const fieldsToReveal = getFieldsToReveal();
 
   useEffect(() => {
-    if (anonAadhaar.status === "logged-in") {
-      localStorage.setItem('username', username);
-      console.log(anonAadhaar)
-      const newUser={
-        username:username,
-        anonid:anonAadhaar.anonAadhaarProofs,
-        role:'citizen'
+    const createUser = async () => {
+      if (anonAadhaar.status === "logged-in") {
+        localStorage.setItem('username', username);
+        console.log(anonAadhaar);
+
+        const newUser = {
+          username: username,
+          anonid: anonAadhaar.anonAadhaarProofs,
+          role: 'citizen'
+        };
+
+        try {
+          const response = await axios.post(`${API_URL}/users`, newUser);
+          console.log(response);
+          const userId = response.data._id; 
+          localStorage.setItem('userId', userId);
+          navigate('/');
+        } catch (error) {
+          console.error('Error creating user:', error);
+        }
+      } else {
+        setLoading(false);
       }
-      axios.post(`${API_URL}/users`,newUser)
-      navigate('/'); 
-      
-    } else {
-      setLoading(false);
-    }
+    };
+
+    createUser();
   }, [anonAadhaar.status, username, navigate]);
 
   if (loading) {

@@ -29,6 +29,8 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import axios from 'axios'
+import { API_URL } from '@/constants'
 
 type MedicalRecord = {
   id: string
@@ -38,6 +40,7 @@ type MedicalRecord = {
   size: string
   content?: string
   imageUrl?: string
+  userId:String
 }
 
 const HealthAnimation = () => {
@@ -74,35 +77,49 @@ const HealthAnimation = () => {
 }
 
 export default function CreativeMedicalRecordsPage() {
-  const [records, setRecords] = useState<MedicalRecord[]>([
-    { id: '1', name: 'Annual Checkup Report', date: '2023-05-15', type: 'PDF', size: '2.3 MB' },
-    { id: '2', name: 'Blood Test Results', date: '2023-06-22', type: 'PDF', size: '1.1 MB' },
-    { id: '3', name: 'X-Ray Scan', date: '2023-07-10', type: 'DICOM', size: '15.7 MB' },
-  ])
+  const [records, setRecords] = useState<MedicalRecord[]>([])
   const [newTextRecord, setNewTextRecord] = useState({ title: '', content: '' })
   const [newImageRecord, setNewImageRecord] = useState<File | null>(null)
   const [showQR, setShowQR] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
+  let anonid = localStorage.getItem('userId')?localStorage.getItem('userId'):"";
 
+
+  useEffect(() => {
+    const fetchRecords = async () => {
+      try {
+        const response = await axios.post(`${API_URL}/medi`,{anonid:anonid});
+        const data = await response.data;
+        setRecords(data);
+      } catch (error) {
+        console.error('Error fetching records:', error);
+      }
+    };
+
+    fetchRecords();
+  }, []);
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
       setIsUploading(true)
-      setTimeout(() => {
+      setTimeout(async () => {
         const newRecord: MedicalRecord = {
           id: Date.now().toString(),
           name: file.name,
           date: new Date().toISOString().split('T')[0],
           type: file.type.split('/')[1].toUpperCase(),
           size: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
+          userId: anonid?anonid:""
         }
+        console.log(newRecord)
+        await axios.post(`${API_URL}/med`,newRecord);
         setRecords([...records, newRecord])
         setIsUploading(false)
       }, 2000) // Simulating upload delay
     }
   }
 
-  const handleTextRecordSubmit = () => {
+  const handleTextRecordSubmit = async () => {
     if (newTextRecord.title && newTextRecord.content) {
       const newRecord: MedicalRecord = {
         id: Date.now().toString(),
@@ -111,7 +128,9 @@ export default function CreativeMedicalRecordsPage() {
         type: 'TEXT',
         size: `${newTextRecord.content.length} chars`,
         content: newTextRecord.content,
+        userId:anonid?anonid:"",
       }
+      await axios.post(`${API_URL}/med`,newRecord);
       setRecords([...records, newRecord])
       setNewTextRecord({ title: '', content: '' })
     }
@@ -135,6 +154,7 @@ export default function CreativeMedicalRecordsPage() {
           type: 'IMAGE',
           size: `${(newImageRecord.size / (1024 * 1024)).toFixed(1)} MB`,
           imageUrl: URL.createObjectURL(newImageRecord),
+          userId: anonid?anonid:""
         }
         setRecords([...records, newRecord])
         setNewImageRecord(null)
@@ -181,30 +201,8 @@ export default function CreativeMedicalRecordsPage() {
         <TabsContent value="file">
           <Card className=" bg-black text-white">
             <CardHeader>
-              <CardTitle>Upload New File Record</CardTitle>
-              <CardDescription>Add a new medical record file to your profile</CardDescription>
+              <CardTitle>Development under Progress</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="grid   items-center gap-1.5  ">
-                <Label htmlFor="medical-record-file">Medical Record File</Label>
-                <Input   id="medical-record-file" type="file" onChange={handleFileUpload} />
-              </div>
-            </CardContent>
-            <CardFooter className='flex justify-center'>
-              <Button disabled={isUploading}>
-                {isUploading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Uploading
-                  </>
-                ) : (
-                  <>
-                    <Upload className="mr-2 h-4 w-4" />
-                    Upload Record
-                  </>
-                )}
-              </Button>
-            </CardFooter>
           </Card>
         </TabsContent>
         <TabsContent value="text">
@@ -242,40 +240,9 @@ export default function CreativeMedicalRecordsPage() {
         </TabsContent>
         <TabsContent value="image">
           <Card className="bg-black text-white">
-            <CardHeader>
-              <CardTitle>Upload New Image Record</CardTitle>
-              <CardDescription>Add a new medical image to your profile</CardDescription>
+          <CardHeader>
+              <CardTitle>Development under Progress</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="medical-record-image">Medical Record Image</Label>
-                <Input id="medical-record-image" type="file" accept="image/*" onChange={handleImageUpload} />
-              </div>
-              {newImageRecord && (
-                <div className="mt-4">
-                  <img 
-                    src={URL.createObjectURL(newImageRecord)} 
-                    alt="Preview" 
-                    className="max-w-full h-auto rounded-lg shadow-lg"
-                  />
-                </div>
-              )}
-            </CardContent>
-            <CardFooter className='flex justify-center'>
-              <Button onClick={handleImageRecordSubmit} disabled={isUploading}>
-                {isUploading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Uploading
-                  </>
-                ) : (
-                  <>
-                    <ImageIcon className="mr-2 h-4 w-4" />
-                    Upload Image
-                  </>
-                )}
-              </Button>
-            </CardFooter>
           </Card>
         </TabsContent>
       </Tabs>
@@ -359,9 +326,7 @@ export default function CreativeMedicalRecordsPage() {
                             </DialogFooter>
                           </DialogContent>
                         </Dialog>
-                        <Button variant="outline" className="bg-black" size="icon" onClick={() => deleteRecord(record.id)}>
-                          <Trash2 className="h-4 w-4 " />
-                        </Button>
+
                       </div>
                     </TableCell>
                   </TableRow>
