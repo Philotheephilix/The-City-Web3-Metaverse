@@ -113,7 +113,7 @@ export default function Dashboard() {
              { icon: Shield, label: 'Public Safety', path: '/public-safety' },
              { icon: Zap, label: 'Energy Use', path: '/energy' },
              { icon: DollarSign, label: 'Financial', path: '/financial' },
-             { icon: PieChart, label: 'Analytics', path: '/analytics' },
+             { icon: PieChart, label: 'Analytics', path: '/analytics/0x974CaA59e49682CdA0AD2bbe82983419A2ECC400' },
              { icon: Hospital, label: 'Medical History', path: '/medical' }
            ].map(({ icon: Icon, label, path }) => (
              <li key={label}>

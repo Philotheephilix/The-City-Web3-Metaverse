@@ -15,6 +15,8 @@ import UtilitiesUsagePage from './pages/subpages/electricitywater';
 import TrafficFlowPage from './pages/subpages/traffic';
 import PYUSDTransfer from './utils/anonAadhaar/pyusd/transfer';
 import UserBillsPage from './pages/payments';
+import CombinedAnalyticsPage from './pages/subpages/analytics';
+import AnalyticsPage from './pages/subpages/markets';
 const AppRoutes: React.FC = () => {
   const location = useLocation();
   return (
@@ -37,6 +39,9 @@ const AppRoutes: React.FC = () => {
         <Route path="/pay" element={<UserBillsPage/>}/>
 
         <Route path="/transfer" element={<PYUSDTransfer/>}/>
+        <Route path="/analytics/:address" element={<CombinedAnalyticsPage/>}/>
+        <Route path="/analytic/:address" element={<AnalyticsPage/>}/>
+
 
        </Routes>
     </BaseLayout>

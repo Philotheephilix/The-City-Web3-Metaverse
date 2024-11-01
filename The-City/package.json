@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@anon-aadhaar/react": "^2.4.0",
+    "@covalenthq/client-sdk": "^2.2.0",
     "@metamask/detect-provider": "^2.0.0",
     "@metamask/providers": "^18.1.1",
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
