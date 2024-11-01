@@ -1,5 +1,5 @@
 "use client"
-
+import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { Bar, BarChart, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { AlertCircle, Car, TrendingDown, TrendingUp, Plus } from 'lucide-react'
+import { AlertCircle, Car, TrendingDown, TrendingUp, Plus, CreditCard } from 'lucide-react'
 
 const initialTrafficData = [
   { time: '00:00', volume: 120, speed: 55 },
@@ -39,6 +39,8 @@ export default function TrafficFlowPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [newTrafficData, setNewTrafficData] = useState({ time: '', volume: '', speed: '' })
 
+  const navigate = useNavigate()
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewTrafficData({ ...newTrafficData, [e.target.name]: e.target.value })
   }
@@ -59,6 +61,8 @@ export default function TrafficFlowPage() {
     <div className="container mx-auto p-4 space-y-4 bg-background text-foreground dark">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Traffic Flow Analysis</h1>
+        <div className='flex justify-around gap-8 '>
+        <Button className="bg-green-300 hover:bg-green-500" onClick={() => navigate('/pay')}><CreditCard className="mr-2 h-4 w-4" /> Pay Now</Button>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button><Plus className="mr-2 h-4 w-4" /> Add Traffic Data</Button>
@@ -120,6 +124,7 @@ export default function TrafficFlowPage() {
             </form>
           </DialogContent>
         </Dialog>
+        </div>
       </div>
 
       <Select onValueChange={setSelectedArea} defaultValue={selectedArea}>

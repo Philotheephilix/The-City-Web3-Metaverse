@@ -148,7 +148,7 @@ export default function CreativeMedicalRecordsPage() {
   }
 
   return (
-    <div className="  px-48 py-8 relative bg-gray-900">
+    <div className="  px-48 py-8 relative bg-black">
       <HealthAnimation />
       <motion.h1 
         className="text-4xl font-bold mb-6 text-white text-white"
@@ -173,7 +173,7 @@ export default function CreativeMedicalRecordsPage() {
       </motion.div>
 
       <Tabs defaultValue="file" className="mb-6">
-        <TabsList className="grid w-full grid-cols-3 bg-gradient-to-r from-cyan-500 to-blue-500 p-10 flex justify-around">
+        <TabsList className="grid w-full grid-cols-3 bg-black-900 p-8 flex justify-around">
           <TabsTrigger value="file">File Upload</TabsTrigger>
           <TabsTrigger value="text">Text Record</TabsTrigger>
           <TabsTrigger value="image">Image Upload</TabsTrigger>
@@ -185,12 +185,12 @@ export default function CreativeMedicalRecordsPage() {
               <CardDescription>Add a new medical record file to your profile</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid w-full max-w-sm items-center gap-1.5 ">
+              <div className="grid   items-center gap-1.5  ">
                 <Label htmlFor="medical-record-file">Medical Record File</Label>
-                <Input id="medical-record-file" type="file" onChange={handleFileUpload} />
+                <Input   id="medical-record-file" type="file" onChange={handleFileUpload} />
               </div>
             </CardContent>
-            <CardFooter>
+            <CardFooter className='flex justify-center'>
               <Button disabled={isUploading}>
                 {isUploading ? (
                   <>
@@ -235,7 +235,7 @@ export default function CreativeMedicalRecordsPage() {
                 </div>
               </div>
             </CardContent>
-            <CardFooter>
+            <CardFooter  className='flex justify-center'>
               <Button onClick={handleTextRecordSubmit}><PlusCircle className="mr-2 h-4 w-4" /> Add Text Record</Button>
             </CardFooter>
           </Card>
@@ -261,7 +261,7 @@ export default function CreativeMedicalRecordsPage() {
                 </div>
               )}
             </CardContent>
-            <CardFooter>
+            <CardFooter className='flex justify-center'>
               <Button onClick={handleImageRecordSubmit} disabled={isUploading}>
                 {isUploading ? (
                   <>

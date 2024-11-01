@@ -9,7 +9,8 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Droplet, Zap, TrendingDown, TrendingUp, Plus } from 'lucide-react'
+import { Droplet, Zap, TrendingDown, TrendingUp, Plus, CreditCard } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 interface WaterData {
     month: string;
     usage: number;
@@ -45,7 +46,7 @@ export default function UtilitiesUsagePage() {
   const [electricityData, setElectricityData] = useState(initialElectricityData)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [newUtilityData, setNewUtilityData] = useState({ month: '', usage: '', secondary: '' })
-
+  const navigate = useNavigate()
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewUtilityData({ ...newUtilityData, [e.target.name]: e.target.value })
   }
@@ -84,9 +85,11 @@ export default function UtilitiesUsagePage() {
     <div className="container mx-auto p-4 space-y-4 bg-background text-foreground dark">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Utilities Usage</h1>
+        <div className='flex justify-around gap-8 '> 
+        <Button className="bg-green-300 hover:bg-green-500" onClick={() => navigate('/pay')}><CreditCard className="mr-2 h-4 w-4" /> Pay Now</Button>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button><Plus className="mr-2 h-4 w-4" /> Add Utility Data</Button>
+            <Button ><Plus className="mr-2 h-4 w-4" /> Add Utility Data</Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
@@ -146,6 +149,7 @@ export default function UtilitiesUsagePage() {
             </form>
           </DialogContent>
         </Dialog>
+        </div>
       </div>
 
       <Tabs defaultValue="water" onValueChange={setActiveTab}>
