@@ -1,22 +1,16 @@
 "use client"
 
 import { useState } from 'react'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogTrigger } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { AlertCircle, CreditCard } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import CustomModal from '@/components/common/Modal'
 import PYUSDTransfer from '@/utils/pyusd/transfer'
-interface TabsTriggerProps {
-  value: string;
-  onClick: () => void;
-  isActive?: boolean; // Add this line
-  children: React.ReactNode;
-}
 
 // Mock data for bills and fines
 const mockBills = {

@@ -2,7 +2,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Badge } from "@/components/ui/badge"
 import { ShieldCheck, AlertTriangle, Siren, TrendingDown, TrendingUp } from 'lucide-react'
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts'
 
@@ -95,7 +94,7 @@ export default function PublicSafetyPage() {
                 fill="#8884d8"
                 dataKey="value"
               >
-                {incidentTypes.map((entry, index) => (
+                {incidentTypes.map((_entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
