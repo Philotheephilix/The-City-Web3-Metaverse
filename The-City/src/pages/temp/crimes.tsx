@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AlertTriangle, TrendingDown, TrendingUp, Plus } from 'lucide-react';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, Cell } from 'recharts';
+import { API_URL } from '@/constants';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
 
@@ -34,7 +35,7 @@ export default function CrimesPage() {
   useEffect(() => {
     const fetchCrimeData = async () => {
       try {
-        const response = await fetch('http://localhost:3000/crime');
+        const response = await fetch(`${API_URL}/crime`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -63,7 +64,7 @@ export default function CrimesPage() {
     };
 
     try {
-      const response = await fetch('http://localhost:3000/crime', {
+      const response = await fetch(`${API_URL}/crime`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

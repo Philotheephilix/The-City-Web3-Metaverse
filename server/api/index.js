@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const { connectToDB } = require('../db/db');
+const { connectDB } = require('../db/db');
 
 app.use(cors());
 
@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
   res.send('Welcome to the API!');
 });
 const startServer = async () => {
-    await connectToDB(); 
+    await connectDB(); 
   };
 startServer();
 module.exports = (req, res) => {

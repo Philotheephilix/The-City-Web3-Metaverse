@@ -2,13 +2,13 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const port = 3000;
-const { connectToDB } = require('./db/db');
+const { connectDB } = require('./db/db');
 
 app.use(cors());
 
 app.use(express.json());
 
-connectToDB();
+connectDB();
 const usersRouter = require('./routes/users');
 const patrolRouter = require('./routes/patrol');
 const medRouter = require('./routes/medical');
