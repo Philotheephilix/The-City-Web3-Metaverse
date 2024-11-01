@@ -1,7 +1,7 @@
 "use client"
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from 'react'
-import { Moon, Sun, BarChart3, Droplets, Wind, Shield, Zap, DollarSign, PieChart, UserCog, Menu, Hospital, CreditCard, AlertCircle, FileText, Activity, TrendingUp } from 'lucide-react'
+import { Moon, Sun, BarChart3, Droplets, Wind, Shield, Zap, DollarSign, PieChart, UserCog, Menu, Hospital, CreditCard, AlertCircle, FileText, Activity, TrendingUp, IndianRupeeIcon } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
@@ -28,7 +28,6 @@ export default function Dashboard() {
   const [isDarkMode, setIsDarkMode] = useState(true)
   const [userRole, setUserRole] = useState('admin')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [paymentAmount, setPaymentAmount] = useState('')
   const navigate = useNavigate()
   
   useEffect(() => {
@@ -55,7 +54,6 @@ export default function Dashboard() {
 
   return (
     <div className={`flex flex-col h-screen ${isDarkMode ? 'dark' : ''}`}>
-      {/* Header */}
       <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center">
@@ -111,8 +109,9 @@ export default function Dashboard() {
              { icon: Shield, label: 'Public Safety', path: '/public-safety' },
              { icon: Zap, label: 'Energy Use', path: '/energy' },
              { icon: DollarSign, label: 'Financial', path: '/financial' },
-             { icon: PieChart, label: 'Analytics', path: '/analytics/0x974CaA59e49682CdA0AD2bbe82983419A2ECC400' },
-             { icon: Hospital, label: 'Medical History', path: '/medical' }
+             { icon: PieChart, label: 'Analytics', path: '/analytics' },
+             { icon: Hospital, label: 'Medical History', path: '/medical' },
+             { icon: IndianRupeeIcon, label: 'Government Expenditure', path: '/public-expenditure' }
            ].map(({ icon: Icon, label, path }) => (
              <li key={label}>
                <Button

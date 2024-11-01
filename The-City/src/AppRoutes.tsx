@@ -17,6 +17,7 @@ import PYUSDTransfer from './utils/pyusd/transfer';
 import UserBillsPage from './pages/payments';
 import CombinedAnalyticsPage from './pages/subpages/analytics';
 import AnalyticsPage from './pages/subpages/markets';
+import ExpenditureVisual from './pages/Expenditure';
 const AppRoutes: React.FC = () => {
   const location = useLocation();
   return (
@@ -31,6 +32,8 @@ const AppRoutes: React.FC = () => {
         <Route path="/energy" element={<EnergyConsumptionPage/>}/>
 
         <Route path="/public-safety" element={<PublicSafetyPage/>}/>
+
+        <Route path="/public-expenditure" element={<ExpenditureVisual/>}/>
 
         <Route path="/air" element={<AirQualityIndexPage/>}/>
         <Route path="/utilities" element={<UtilitiesUsagePage/>}/>
