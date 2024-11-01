@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useEffect } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -48,14 +50,19 @@ interface TransactionStats {
 }
 
 const API_KEY = "cqt_rQP7QrcrkRVPtVFc6vCPxcKYQBpk"
-const WALLET_ADDRESS = "0xbFc5E48B2B2FCb711F66286daF39FaEB683E46AE"
+
+const DEPARTMENTS = [
+  { name: 'PWD', walletAddress: '0x3fA87a4D992196498f721371617ABC1fFbb6d2b5' },
+  { name: 'Medical', walletAddress: '0xb5d85CBf7cB3EE0D56b3bB207D5Fc4B82f43F511' },
+  { name: 'Education', walletAddress: '0x3fA87a4D992196498f721371617ABC1fFbb6d2b5' },
+]
 
 const formatDate = (dateString: string): string => {
   return new Date(dateString).toLocaleDateString()
 }
 
-const fetchTransactions = async (): Promise<CovalentResponse> => {
-  const API_URL = `https://api.covalenthq.com/v1/eth-mainnet/address/${WALLET_ADDRESS}/transactions_v2/?key=${API_KEY}`
+const fetchTransactions = async (walletAddress: string): Promise<CovalentResponse> => {
+  const API_URL = `https://api.covalenthq.com/v1/eth-mainnet/address/${walletAddress}/transactions_v2/?key=${API_KEY}`
   
   try {
     const response = await fetch(API_URL)
@@ -86,17 +93,103 @@ interface ChartDataPoint {
   amount: number
 }
 
+const prepareChartData = (transactions: Transaction[]): ChartDataPoint[] => {
+  return transactions.map(tx => ({
+    date: formatDate(tx.block_signed_at),
+    amount: parseFloat(tx.value_quote.toString())
+  }))
+}
+
+const renderTransactions = (transactions: Transaction[], activeTab: "incoming" | "outgoing", walletAddress: string) => (
+  <Table>
+    <TableHeader>
+      <TableRow>
+        <TableHead>Date</TableHead>
+        <TableHead>From/To</TableHead>
+        <TableHead className="text-right">Amount (USD)</TableHead>
+        <TableHead className="text-right">Gas Fee (USD)</TableHead>
+      </TableRow>
+    </TableHeader>
+    <TableBody>
+      {transactions.map((tx) => (
+        <TableRow key={tx.tx_hash}>
+          <TableCell>{formatDate(tx.block_signed_at)}</TableCell>
+          <TableCell className="font-mono">
+            {activeTab === "incoming" ? 
+              `From: ${tx.from_address.slice(0,6)}...${tx.from_address.slice(-4)}` :
+              `To: ${tx.to_address.slice(0,6)}...${tx.to_address.slice(-4)}`
+            }
+          </TableCell>
+          <TableCell className="text-right">${tx.value_quote.toFixed(2)}</TableCell>
+          <TableCell className="text-right">${tx.gas_quote.toFixed(2)}</TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
+  </Table>
+)
+
+const renderChart = (transactions: Transaction[]) => (
+  <ResponsiveContainer width="100%" height={300}>
+    <BarChart data={prepareChartData(transactions)} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="date" />
+      <YAxis />
+      <Tooltip />
+      <Legend />
+      <Bar dataKey="amount" fill="#8884d8" name="Amount (USD)" />
+    </BarChart>
+  </ResponsiveContainer>
+)
+
+const renderStats = (stats: TransactionStats) => (
+  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+    <Card className="bg-gray-700 border-gray-600">
+      <CardHeader>
+        <CardTitle className="text-sm">Total Volume</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className="text-2xl font-bold">${stats.total}</p>
+      </CardContent>
+    </Card>
+    <Card className="bg-gray-700 border-gray-600">
+      <CardHeader>
+        <CardTitle className="text-sm">Transaction Count</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className="text-2xl font-bold">{stats.count}</p>
+      </CardContent>
+    </Card>
+    <Card className="bg-gray-700 border-gray-600">
+      <CardHeader>
+        <CardTitle className="text-sm">Average Value</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className="text-2xl font-bold">${stats.average}</p>
+      </CardContent>
+    </Card>
+    <Card className="bg-gray-700 border-gray-600">
+      <CardHeader>
+        <CardTitle className="text-sm">Total Gas Spent</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className="text-2xl font-bold">${stats.totalGas}</p>
+      </CardContent>
+    </Card>
+  </div>
+)
+
 export default function TransactionDashboard() {
   const [data, setData] = useState<CovalentResponse | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<"incoming" | "outgoing">("incoming")
+  const [activeDepartment, setActiveDepartment] = useState(DEPARTMENTS[0])
 
   useEffect(() => {
     const loadData = async () => {
       try {
         setLoading(true)
-        const result = await fetchTransactions()
+        const result = await fetchTransactions(activeDepartment.walletAddress)
         setData(result)
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred")
@@ -105,7 +198,7 @@ export default function TransactionDashboard() {
       }
     }
     loadData()
-  }, [])
+  }, [activeDepartment])
 
   if (loading) {
     return (
@@ -134,11 +227,11 @@ export default function TransactionDashboard() {
     const items = data?.items || []
     
     const incoming = items.filter(tx => 
-      tx.to_address.toLowerCase() === WALLET_ADDRESS.toLowerCase()
+      tx.to_address.toLowerCase() === activeDepartment.walletAddress.toLowerCase()
     )
     
     const outgoing = items.filter(tx => 
-      tx.from_address.toLowerCase() === WALLET_ADDRESS.toLowerCase()
+      tx.from_address.toLowerCase() === activeDepartment.walletAddress.toLowerCase()
     )
     
     return { incoming, outgoing }
@@ -148,145 +241,49 @@ export default function TransactionDashboard() {
   const incomingStats = calculateStats(incoming)
   const outgoingStats = calculateStats(outgoing)
 
-  const prepareChartData = (transactions: Transaction[]): ChartDataPoint[] => {
-    return transactions.map(tx => ({
-      date: formatDate(tx.block_signed_at),
-      amount: parseFloat(tx.value_quote.toString())
-    }))
-  }
-
-  const renderTransactions = (transactions: Transaction[]) => (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Date</TableHead>
-          <TableHead>From/To</TableHead>
-          <TableHead className="text-right">Amount (USD)</TableHead>
-          <TableHead className="text-right">Gas Fee (USD)</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {transactions.map((tx) => (
-          <TableRow key={tx.tx_hash}>
-            <TableCell>{formatDate(tx.block_signed_at)}</TableCell>
-            <TableCell className="font-mono">
-              {activeTab === "incoming" ? 
-                `From: ${tx.from_address.slice(0,6)}...${tx.from_address.slice(-4)}` :
-                `To: ${tx.to_address.slice(0,6)}...${tx.to_address.slice(-4)}`
-              }
-            </TableCell>
-            <TableCell className="text-right">${tx.value_quote.toFixed(2)}</TableCell>
-            <TableCell className="text-right">${tx.gas_quote.toFixed(2)}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  )
-
-  const renderChart = (transactions: Transaction[]) => (
-    <ResponsiveContainer width="100%" height={300}>
-      <BarChart data={prepareChartData(transactions)} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="date" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Bar dataKey="amount" fill="#8884d8" name="Amount (USD)" />
-      </BarChart>
-    </ResponsiveContainer>
-  )
-
-  const renderStats = (stats: TransactionStats) => (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-      <Card className="bg-gray-700 border-gray-600">
-        <CardHeader>
-          <CardTitle className="text-sm">Total Volume</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-2xl font-bold">${stats.total}</p>
-        </CardContent>
-      </Card>
-      <Card className="bg-gray-700 border-gray-600">
-        <CardHeader>
-          <CardTitle className="text-sm">Transaction Count</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-2xl font-bold">{stats.count}</p>
-        </CardContent>
-      </Card>
-      <Card className="bg-gray-700 border-gray-600">
-        <CardHeader>
-          <CardTitle className="text-sm">Average Value</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-2xl font-bold">${stats.average}</p>
-        </CardContent>
-      </Card>
-      <Card className="bg-gray-700 border-gray-600">
-        <CardHeader>
-          <CardTitle className="text-sm">Total Gas Spent</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-2xl font-bold">${stats.totalGas}</p>
-        </CardContent>
-      </Card>
-    </div>
-  )
-
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8">
-      <Card className="bg-gray-800 border-gray-700">
+      <Card className="bg-gray-800 border-gray-700 mb-8">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">Ethereum Transaction Dashboard</CardTitle>
-          <CardDescription className="text-gray-400">
-            Overview of ETH transactions for address: {WALLET_ADDRESS}
+          <CardTitle className="text-xl">Department Dashboard</CardTitle>
+          <CardDescription>
+            Viewing wallet for: 
+            <select 
+              value={activeDepartment.name} 
+              onChange={(e) => {
+                const selectedDept = DEPARTMENTS.find(dept => dept.name === e.target.value)
+                if (selectedDept) setActiveDepartment(selectedDept)
+              }}
+              className="bg-gray-700 ml-2"
+            >
+              {DEPARTMENTS.map(dept => (
+                <option key={dept.walletAddress} value={dept.name}>
+                  {dept.name}
+                </option>
+              ))}
+            </select>
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "incoming" | "outgoing")} className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-8">
-              <TabsTrigger value="incoming">Incoming Transactions</TabsTrigger>
-              <TabsTrigger value="outgoing">Outgoing Transactions</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="incoming">
-              {renderStats(incomingStats)}
-              <div className="grid gap-8 md:grid-cols-2">
-                <Card className="bg-gray-700 border-gray-600">
-                  <CardHeader>
-                    <CardTitle>Transaction Details</CardTitle>
-                  </CardHeader>
-                  <CardContent>{renderTransactions(incoming)}</CardContent>
-                </Card>
-                <Card className="bg-gray-700 border-gray-600">
-                  <CardHeader>
-                    <CardTitle>Transaction Analysis</CardTitle>
-                  </CardHeader>
-                  <CardContent>{renderChart(incoming)}</CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="outgoing">
-              {renderStats(outgoingStats)}
-              <div className="grid gap-8 md:grid-cols-2">
-                <Card className="bg-gray-700 border-gray-600">
-                  <CardHeader>
-                    <CardTitle>Transaction Details</CardTitle>
-                  </CardHeader>
-                  <CardContent>{renderTransactions(outgoing)}</CardContent>
-                </Card>
-                <Card className="bg-gray-700 border-gray-600">
-                  <CardHeader>
-                    <CardTitle>Transaction Analysis</CardTitle>
-                  </CardHeader>
-                  <CardContent>{renderChart(outgoing)}</CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-          </Tabs>
-        </CardContent>
       </Card>
+      
+      <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as "incoming" | "outgoing")}>
+        <TabsList>
+          <TabsTrigger value="incoming">Incoming</TabsTrigger>
+          <TabsTrigger value="outgoing">Outgoing</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="incoming">
+          {renderStats(incomingStats)}
+          {renderChart(incoming)}
+          {renderTransactions(incoming, "incoming", activeDepartment.walletAddress)}
+        </TabsContent>
+        
+        <TabsContent value="outgoing">
+          {renderStats(outgoingStats)}
+          {renderChart(outgoing)}
+          {renderTransactions(outgoing, "outgoing", activeDepartment.walletAddress)}
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }

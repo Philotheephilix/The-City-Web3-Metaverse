@@ -14,10 +14,37 @@ import SafetyAlerts from './SafetyAlerts'
 import EnergyUsage from './EnergyUsage'
 import FinancialModule from './FinancialModule'
 import DataAnalytics from './DataAnalytics'
+import axios from "axios";
+
+interface Transaction {
+  transactionHash: string;
+  blockNumber: number;
+  timestamp: number;
+}
+import CombinedAnalyticsPage from "../subpages/analytics"
+const NOVES_API_KEY = import.meta.env.VITE_NOVES_TRANSLATE_API_KEY;
+const fetchTransactionHistory = async (address: string): Promise<Transaction[]> => {
+  const options = {
+    method: "GET",
+    url: `https://translate.noves.fi/evm/eth/history/${address}`,
+    headers: {
+      accept: "application/json",
+      apiKey: NOVES_API_KEY,
+    },
+  };
+  try {
+    const response = await axios.request(options);
+    return response.data.items.slice(0,5);
+  } catch (error) {
+    console.error("Failed to fetch transaction history:", error);
+    return [];
+  }
+};
 
 export default function Dashboard() {
   const [userRole, setUserRole] = useState('admin')
   const [, setIsLoggedIn] = useState(false)
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const navigate = useNavigate()
   
   useEffect(() => {
@@ -25,6 +52,10 @@ export default function Dashboard() {
     const user = storedUser ? JSON.parse(storedUser) : {};
     if (user && user.status === 'logged-in') {
       setIsLoggedIn(true);
+      const userAddress = "0x95222290DD7278Aa3Ddd389Cc1E1d165CC4BAfe5";
+      if (userAddress) {
+        fetchTransactionHistory(userAddress).then(setTransactions);
+      }
     } else {
       setIsLoggedIn(false);
     }
@@ -204,15 +235,51 @@ export default function Dashboard() {
               </div>
 
               {/* Financial Module */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Financial Overview</CardTitle>
-                  <CardDescription>PYUSD transactions and gas fee calculations</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <FinancialModule />
-                </CardContent>
-              </Card>
+              <Card onClick={()=>{navigate('analytics')}}>
+                  <CardHeader>
+                    <CardTitle>Recent Transactions</CardTitle>
+                    <CardDescription>Your latest transaction activity.</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {transactions.length ? (
+                      <div className="overflow-x-auto bg-black">
+                        <table className="min-w-full divide-y divide-gray-200 bg-black border rounded-md">
+                          <thead className="bg-black text-center">
+                            <tr>
+                              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Transaction Hash
+                              </th>
+                              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Block Number
+                              </th>
+                              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Timestamp
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody className="bg-black divide-y divide-gray-600">
+                            {transactions.map((tx) => (
+                              <tr key={tx.transactionHash} className="hover:bg-gray-800 text-center">
+                                <td className="px-6 py-4 whitespace-nowrap ">
+                                  <div className="flex items-center">
+                                    <button className="text-blue-600 font-medium hover:underline">
+                                      {tx.transactionHash.slice(0, 10)}...{tx.transactionHash.slice(-8)}
+                                    </button>
+                                  </div>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-gray-500">{tx.blockNumber}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-gray-500">{formatTimestamp(tx.timestamp)}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                            <button>view more</button>
+                      </div>
+                    ) : (
+                      <div className="text-center text-gray-400">No transaction data available.</div>
+                    )}
+                  </CardContent>
+                </Card>
 
               {/* Data Analytics */}
               <Card>
@@ -279,3 +346,6 @@ export default function Dashboard() {
     </div>
   )
 }
+const formatTimestamp = (timestamp: number) => {
+  return new Date(timestamp * 1000).toLocaleString();
+};
