@@ -6,104 +6,187 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { AlertTriangle, TrendingDown, TrendingUp, MapPin } from 'lucide-react'
-import { Bar, BarChart, Line, LineChart, Pie, PieChart, ResponsiveContainer, Cell, Legend, Tooltip, XAxis, YAxis } from 'recharts'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { AlertTriangle, TrendingDown, TrendingUp, Plus } from 'lucide-react'
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, Cell } from 'recharts'
 
-const crimeData = {
-  daily: [
-    { date: '2023-10-25', theft: 12, assault: 5, burglary: 8, vandalism: 15, fraud: 7 },
-    { date: '2023-10-26', theft: 10, assault: 6, burglary: 7, vandalism: 13, fraud: 9 },
-    { date: '2023-10-27', theft: 15, assault: 4, burglary: 9, vandalism: 16, fraud: 6 },
-    { date: '2023-10-28', theft: 11, assault: 7, burglary: 6, vandalism: 14, fraud: 8 },
-    { date: '2023-10-29', theft: 13, assault: 5, burglary: 10, vandalism: 12, fraud: 7 },
-    { date: '2023-10-30', theft: 14, assault: 6, burglary: 7, vandalism: 15, fraud: 9 },
-    { date: '2023-10-31', theft: 16, assault: 8, burglary: 9, vandalism: 17, fraud: 10 },
-  ],
-  monthly: [
-    { month: 'Jun', theft: 320, assault: 140, burglary: 180, vandalism: 350, fraud: 160 },
-    { month: 'Jul', theft: 310, assault: 150, burglary: 170, vandalism: 340, fraud: 170 },
-    { month: 'Aug', theft: 340, assault: 130, burglary: 190, vandalism: 360, fraud: 150 },
-    { month: 'Sep', theft: 330, assault: 160, burglary: 175, vandalism: 355, fraud: 165 },
-    { month: 'Oct', theft: 350, assault: 145, burglary: 185, vandalism: 370, fraud: 155 },
-  ]
-}
-
-const crimeDistribution = [
-  { name: 'Theft', value: 350 },
-  { name: 'Assault', value: 145 },
-  { name: 'Burglary', value: 185 },
-  { name: 'Vandalism', value: 370 },
-  { name: 'Fraud', value: 155 },
+const initialCrimeData = [
+  { month: 'Jan', violent: 45, property: 120, cyber: 30 },
+  { month: 'Feb', violent: 50, property: 115, cyber: 35 },
+  { month: 'Mar', violent: 40, property: 130, cyber: 40 },
+  { month: 'Apr', violent: 55, property: 125, cyber: 38 },
+  { month: 'May', violent: 60, property: 140, cyber: 45 },
+  { month: 'Jun', violent: 52, property: 135, cyber: 50 },
 ]
 
-const crimeHotspots = [
-  { id: 1, area: 'Central Park', lat: 40.7829, lng: -73.9654, crimeType: 'Theft', riskLevel: 'High' },
-  { id: 2, area: 'Downtown', lat: 40.7127, lng: -74.0059, crimeType: 'Assault', riskLevel: 'Medium' },
-  { id: 3, area: 'Shopping District', lat: 40.7308, lng: -73.9973, crimeType: 'Burglary', riskLevel: 'High' },
-  { id: 4, area: 'Residential Area A', lat: 40.7489, lng: -73.9680, crimeType: 'Vandalism', riskLevel: 'Medium' },
+const initialCrimeTypes = [
+  { name: 'Assault', value: 30 },
+  { name: 'Burglary', value: 25 },
+  { name: 'Theft', value: 20 },
+  { name: 'Fraud', value: 15 },
+  { name: 'Vandalism', value: 10 },
 ]
 
-const COLORS = ['#f97316', '#facc15', '#4ade80', '#2dd4bf', '#818cf8']
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8']
 
 export default function CrimesPage() {
-  const [timeFrame, setTimeFrame] = useState('daily')
+  const [crimeData, setCrimeData] = useState(initialCrimeData)
+  const [crimeTypes, setCrimeTypes] = useState(initialCrimeTypes)
+  const [selectedArea, setSelectedArea] = useState('downtown')
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [newCrimeData, setNewCrimeData] = useState({ month: '', violent: '', property: '', cyber: '' })
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewCrimeData({ ...newCrimeData, [e.target.name]: e.target.value })
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    const newData = {
+      month: newCrimeData.month,
+      violent: parseInt(newCrimeData.violent),
+      property: parseInt(newCrimeData.property),
+      cyber: parseInt(newCrimeData.cyber),
+    }
+    setCrimeData([...crimeData, newData])
+    setIsDialogOpen(false)
+    setNewCrimeData({ month: '', violent: '', property: '', cyber: '' })
+  }
 
   return (
-    <div className=" w-full px-48 py-8 space-y-6 bg-background text-foreground dark">
-      <h1 className="text-3xl font-bold">Crime Statistics and Analysis</h1>
+    <div className="container mx-auto p-4 space-y-4 bg-background text-foreground dark">
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold">Crime Statistics Dashboard</h1>
 
-      <Select onValueChange={setTimeFrame} defaultValue={timeFrame}>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button><Plus className="mr-2 h-4 w-4" /> Add Crime Data</Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Add New Crime Data</DialogTitle>
+              <DialogDescription>
+                Enter the new crime data point here. Click save when you're done.
+              </DialogDescription>
+            </DialogHeader>
+            <form onSubmit={handleSubmit}>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="month" className="text-right">
+                    Month
+                  </Label>
+                  <Input
+                    id="month"
+                    name="month"
+                    value={newCrimeData.month}
+                    onChange={handleInputChange}
+                    className="col-span-3"
+                    required
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="violent" className="text-right">
+                    Violent
+                  </Label>
+                  <Input
+                    id="violent"
+                    name="violent"
+                    type="number"
+                    value={newCrimeData.violent}
+                    onChange={handleInputChange}
+                    className="col-span-3"
+                    required
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="property" className="text-right">
+                    Property
+                  </Label>
+                  <Input
+                    id="property"
+                    name="property"
+                    type="number"
+                    value={newCrimeData.property}
+                    onChange={handleInputChange}
+                    className="col-span-3"
+                    required
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="cyber" className="text-right">
+                    Cyber
+                  </Label>
+                  <Input
+                    id="cyber"
+                    name="cyber"
+                    type="number"
+                    value={newCrimeData.cyber}
+                    onChange={handleInputChange}
+                    className="col-span-3"
+                    required
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button type="submit">Save changes</Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      <Select onValueChange={setSelectedArea} defaultValue={selectedArea}>
         <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Select time frame" />
+          <SelectValue placeholder="Select area" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="daily">Daily</SelectItem>
-          <SelectItem value="monthly">Monthly</SelectItem>
+          <SelectItem value="downtown">Downtown</SelectItem>
+          <SelectItem value="suburban">Suburban</SelectItem>
+          <SelectItem value="industrial">Industrial</SelectItem>
         </SelectContent>
       </Select>
 
       <Card>
         <CardHeader>
-          <CardTitle>Crime Incidents Over Time</CardTitle>
-          <CardDescription className="text-muted-foreground">Trend of reported incidents by crime type</CardDescription>
+          <CardTitle>Crime Trends</CardTitle>
+          <CardDescription>Monthly breakdown of crime categories in {selectedArea} area</CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={crimeData[timeFrame as 'daily' | 'monthly']}>
-              <XAxis dataKey={timeFrame === 'daily' ? 'date' : 'month'} stroke="currentColor" opacity={0.5} />
+            <BarChart data={crimeData}>
+              <XAxis dataKey="month" stroke="currentColor" opacity={0.5} />
               <YAxis stroke="currentColor" opacity={0.5} />
               <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--popover))', border: 'none', borderRadius: '6px' }} />
               <Legend />
-              <Line type="monotone" dataKey="theft" stroke="#FF8042" strokeWidth={2} />
-              <Line type="monotone" dataKey="assault" stroke="#FFBB28" strokeWidth={2} />
-              <Line type="monotone" dataKey="burglary" stroke="#00C49F" strokeWidth={2} />
-              <Line type="monotone" dataKey="vandalism" stroke="#0088FE" strokeWidth={2} />
-              <Line type="monotone" dataKey="fraud" stroke="#8884D8" strokeWidth={2} />
-            </LineChart>
+              <Bar dataKey="violent" fill="#ef4444" />
+              <Bar dataKey="property" fill="#3b82f6" />
+              <Bar dataKey="cyber" fill="#10b981" />
+            </BarChart>
           </ResponsiveContainer>
         </CardContent>
       </Card>
 
       <Alert variant="destructive">
         <AlertTriangle className="h-4 w-4" />
-        <AlertTitle>Crime Alert</AlertTitle>
+        <AlertTitle>Crime Hotspot Alert</AlertTitle>
         <AlertDescription>
-          Significant increase in theft incidents observed in the shopping district over the past week. Enhanced security measures are being implemented.
+          Increased property crimes reported in the {selectedArea} area. Extra patrols have been deployed.
         </AlertDescription>
       </Alert>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card>
           <CardHeader>
-            <CardTitle>Crime Distribution</CardTitle>
-            <CardDescription className="text-muted-foreground">Breakdown of crime types</CardDescription>
+            <CardTitle>Crime Type Distribution</CardTitle>
+            <CardDescription>Breakdown of reported crimes by type</CardDescription>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
-                  data={crimeDistribution}
+                  data={crimeTypes}
                   cx="50%"
                   cy="50%"
                   labelLine={false}
@@ -111,11 +194,11 @@ export default function CrimesPage() {
                   fill="#8884d8"
                   dataKey="value"
                 >
-                  {crimeDistribution.map((entry, index) => (
+                  {crimeTypes.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--popover))', border: 'none', borderRadius: '6px' }} />
+                <Tooltip contentStyle={{ backgroundColor: 'white', border: 'none', borderRadius: '6px' }} />
                 <Legend />
               </PieChart>
             </ResponsiveContainer>
@@ -124,22 +207,30 @@ export default function CrimesPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Crime Hotspots</CardTitle>
-            <CardDescription className="text-muted-foreground">Areas with higher crime rates</CardDescription>
+            <CardTitle>Crime Insights</CardTitle>
           </CardHeader>
           <CardContent>
             <ul className="space-y-2">
-              {crimeHotspots.map((hotspot) => (
-                <li key={hotspot.id} className="flex items-center justify-between">
-                  <span className="flex items-center">
-                    <MapPin className="h-4 w-4 mr-2" />
-                    {hotspot.area} - {hotspot.crimeType}
-                  </span>
-                  <Badge variant={hotspot.riskLevel === 'High' ? 'destructive' : 'default'}>
-                    {hotspot.riskLevel}
-                  </Badge>
-                </li>
-              ))}
+              <li className="flex items-center justify-between">
+                <span>Total reported crimes (last 30 days):</span>
+                <Badge variant="outline">
+                  {crimeData.reduce((acc, curr) => acc + curr.violent + curr.property + curr.cyber, 0)}
+                </Badge>
+              </li>
+              <li className="flex items-center justify-between">
+                <span>Most common crime type:</span>
+                <Badge variant="outline" className="bg-primary text-primary-foreground">
+                  {crimeTypes.reduce((prev, current) => (prev.value > current.value) ? prev : current).name}
+                </Badge>
+              </li>
+              <li className="flex items-center">
+                <TrendingDown className="h-4 w-4 mr-2 text-green-500" />
+                5% decrease in violent crimes compared to last month
+              </li>
+              <li className="flex items-center">
+                <TrendingUp className="h-4 w-4 mr-2 text-red-500" />
+                12% increase in cybercrime reports over the past quarter
+              </li>
             </ul>
           </CardContent>
         </Card>
@@ -147,74 +238,18 @@ export default function CrimesPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Crime Trends and Analysis</CardTitle>
+          <CardTitle>Crime Prevention Recommendations</CardTitle>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="trends" className="w-full">
-            <TabsContent value="trends">
-              <ul className="space-y-2">
-                <li className="flex items-center">
-                  <TrendingDown className="h-4 w-4 mr-2 text-green-500" />
-                  Overall crime rate down by 5% compared to last year
-                </li>
-                <li className="flex items-center">
-                  <TrendingUp className="h-4 w-4 mr-2 text-red-500" />
-                  Increase in cybercrime incidents, up 15% from previous month
-                </li>
-              </ul>
-            </TabsContent>
-            <TabsContent value="insights">
-              <ul className="list-disc pl-5 space-y-2">
-                <li>Correlation observed between increased foot traffic in shopping districts and theft incidents</li>
-                <li>Seasonal pattern detected: burglaries increase by 20% during summer months</li>
-                <li>Areas with improved street lighting show a 15% decrease in nighttime crimes</li>
-                <li>Online fraud cases are increasingly targeting elderly residents</li>
-              </ul>
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Predictive Analysis</CardTitle>
-          <CardDescription className="text-muted-foreground">Projected crime rates for next month</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={crimeData.monthly}>
-              <XAxis dataKey="month" stroke="currentColor" opacity={0.5} />
-              <YAxis stroke="currentColor" opacity={0.5} />
-              <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--popover))', border: 'none', borderRadius: '6px' }} />
-              <Legend />
-              <Bar dataKey="theft" fill="#FF8042" />
-              <Bar dataKey="assault" fill="#FFBB28" />
-              <Bar dataKey="burglary" fill="#00C49F" />
-              <Bar dataKey="vandalism" fill="#0088FE" />
-              <Bar dataKey="fraud" fill="#8884D8" />
-            </BarChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Safety Recommendations</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul className="list-disc pl-5 space-y-2 text-foreground">
-            <li>Implement community policing programs in high-risk areas</li>
-            <li>Enhance surveillance in shopping districts during peak hours</li>
-            <li>Conduct cybersecurity awareness campaigns, especially for elderly residents</li>
-            <li>Improve street lighting in areas with high nighttime crime rates</li>
-            <li>Encourage residents to participate in neighborhood watch programs</li>
+          <ul className="list-disc pl-5 space-y-2">
+            <li>Increase community policing efforts in high-crime areas</li>
+            <li>Implement neighborhood watch programs</li>
+            <li>Enhance street lighting in vulnerable locations</li>
+            <li>Provide cybersecurity awareness training for residents and businesses</li>
+            <li>Expand youth engagement programs to reduce juvenile delinquency</li>
           </ul>
         </CardContent>
       </Card>
-
-      <div className="flex justify-end">
-        <Button>Generate Detailed Report</Button>
-      </div>
     </div>
   )
 }

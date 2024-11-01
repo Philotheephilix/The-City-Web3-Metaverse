@@ -6,9 +6,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
-import { AlertCircle, Car, TrendingDown, TrendingUp } from 'lucide-react'
+import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { AlertCircle, Car, TrendingDown, TrendingUp, Plus } from 'lucide-react'
 
-const trafficData = [
+const initialTrafficData = [
   { time: '00:00', volume: 120, speed: 55 },
   { time: '03:00', volume: 80, speed: 60 },
   { time: '06:00', volume: 200, speed: 45 },
@@ -31,10 +35,92 @@ const congestionTrend = [
 
 export default function TrafficFlowPage() {
   const [selectedArea, setSelectedArea] = useState('downtown')
+  const [trafficData, setTrafficData] = useState(initialTrafficData)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [newTrafficData, setNewTrafficData] = useState({ time: '', volume: '', speed: '' })
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewTrafficData({ ...newTrafficData, [e.target.name]: e.target.value })
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    const newData = {
+      time: newTrafficData.time,
+      volume: parseInt(newTrafficData.volume),
+      speed: parseInt(newTrafficData.speed)
+    }
+    setTrafficData([...trafficData, newData])
+    setIsDialogOpen(false)
+    setNewTrafficData({ time: '', volume: '', speed: '' })
+  }
 
   return (
     <div className="container mx-auto p-4 space-y-4 bg-background text-foreground dark">
-      <h1 className="text-3xl font-bold">Traffic Flow Analysis</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold">Traffic Flow Analysis</h1>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button><Plus className="mr-2 h-4 w-4" /> Add Traffic Data</Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Add New Traffic Data</DialogTitle>
+              <DialogDescription>
+                Enter the new traffic data point here. Click save when you're done.
+              </DialogDescription>
+            </DialogHeader>
+            <form onSubmit={handleSubmit}>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="time" className="text-right">
+                    Time
+                  </Label>
+                  <Input
+                    id="time"
+                    name="time"
+                    value={newTrafficData.time}
+                    onChange={handleInputChange}
+                    className="col-span-3"
+                    required
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="volume" className="text-right">
+                    Volume
+                  </Label>
+                  <Input
+                    id="volume"
+                    name="volume"
+                    type="number"
+                    value={newTrafficData.volume}
+                    onChange={handleInputChange}
+                    className="col-span-3"
+                    required
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="speed" className="text-right">
+                    Speed
+                  </Label>
+                  <Input
+                    id="speed"
+                    name="speed"
+                    type="number"
+                    value={newTrafficData.speed}
+                    onChange={handleInputChange}
+                    className="col-span-3"
+                    required
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button type="submit">Save changes</Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
+      </div>
 
       <Select onValueChange={setSelectedArea} defaultValue={selectedArea}>
         <SelectTrigger className="w-[180px]">

@@ -14,6 +14,7 @@ import AirQualityIndexPage from './pages/subpages/airquality';
 import UtilitiesUsagePage from './pages/subpages/electricitywater';
 import TrafficFlowPage from './pages/subpages/traffic';
 import PYUSDTransfer from './utils/anonAadhaar/pyusd/transfer';
+import UserBillsPage from './pages/payments';
 const AppRoutes: React.FC = () => {
   const location = useLocation();
   return (
@@ -33,6 +34,7 @@ const AppRoutes: React.FC = () => {
         <Route path="/utilities" element={<UtilitiesUsagePage/>}/>
         <Route path="/traffic" element={<TrafficFlowPage/>}/>
 
+        <Route path="/pay" element={<UserBillsPage/>}/>
 
         <Route path="/transfer" element={<PYUSDTransfer/>}/>
 

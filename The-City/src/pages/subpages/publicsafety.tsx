@@ -99,7 +99,7 @@ export default function PublicSafetyPage() {
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--popover))', border: 'none', borderRadius: '6px' }} />
+              <Tooltip contentStyle={{ backgroundColor: 'white', border: 'none', borderRadius: '6px' }} />
               <Legend />
             </PieChart>
           </ResponsiveContainer>
