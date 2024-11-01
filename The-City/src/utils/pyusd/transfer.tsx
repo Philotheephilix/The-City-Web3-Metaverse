@@ -1,6 +1,11 @@
 // First, install required types:
 // npm install --save-dev @types/node @types/react @types/react-dom
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPaypal } from '@fortawesome/free-brands-svg-icons';
+interface PYUSDTransferProps {
+  initialReceiverAddress?: string;
+  initialAmount?: string;
+}
 // types.ts
 interface Window {
     ethereum?: MetaMaskEthereumProvider;
@@ -22,7 +27,7 @@ interface Window {
   import React, { useState, useEffect } from 'react';
   import { ethers } from 'ethers';
   import detectEthereumProvider from '@metamask/detect-provider';
-  import PYUSD_ABI from '../../../../artifacts/contracts/PyUsd.sol/PYUSD.json';
+  import PYUSD_ABI from '../../../artifacts/contracts/PyUsd.sol/PYUSD.json';
   
   declare global {
     interface Window {
@@ -35,16 +40,16 @@ interface Window {
     type: 'info' | 'success' | 'error';
   }
   
-  const PYUSDTransfer: React.FC = () => {
+  const PYUSDTransfer: React.FC<PYUSDTransferProps> = ({ initialReceiverAddress, initialAmount }) => {
     const [account, setAccount] = useState<string>('');
-    const [amount, setAmount] = useState<string>('');
+    const [amount, setAmount] = useState<string>(initialAmount || '');
     const [balance, setBalance] = useState<string>('0');
-    const [receiverAddress, setReceiverAddress] = useState<string>('');
+    const [receiverAddress, setReceiverAddress] = useState<string>(initialReceiverAddress || '');
     const [status, setStatus] = useState<TransferStatus | null>(null);
     const [isConnected, setIsConnected] = useState<boolean>(false);
   
     const PYUSD_CONTRACT_ADDRESS = '0x5fbdb2315678afecb367f032d93f642f64180aa3';
-  
+    console.log(initialAmount,initialReceiverAddress)
     useEffect(() => {
       checkIfWalletIsConnected();
     }, []);
@@ -207,8 +212,8 @@ interface Window {
     };
   
     return (
-      <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-xl">
-        <h1 className="text-2xl font-bold mb-6">PYUSD Transfer</h1>
+      <div className="max-w-md mx-auto mt-10 p-6 bg-slate-800 rounded-lg shadow-xl">
+        <h1 className="text-2xl font-bold text-slate-100 mb-6">PYUSD Transfer</h1>
         
         {!isConnected ? (
           <button
@@ -220,45 +225,50 @@ interface Window {
         ) : (
           <div className="space-y-4">
             <div>
-              <p className="text-sm text-gray-600">Connected Account:</p>
-              <p className="font-mono text-sm">{account}</p>
+              <p className="text-sm text-white">Connected Account:</p>
+              <p className="font-mono text-slate-400 text-sm">{account}</p>
             </div>
             
             <div>
-              <p className="text-sm text-gray-600">PYUSD Balance:</p>
-              <p className="font-mono text-sm">{balance} PYUSD</p>
+              <p className="text-sm text-white">PYUSD Balance:</p>
+              <p className="font-mono text-slate-400 text-sm">{balance} PYUSD</p>
             </div>
             
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Amount (PYUSD)
-              </label>
-              <input
-                type="number"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                placeholder="0.00"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Receiver Address
-              </label>
-              <input
-                type="text"
-                value={receiverAddress}
-                onChange={(e) => setReceiverAddress(e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                placeholder="0x..."
-              />
-            </div>
+            {!initialAmount && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Amount (PYUSD)
+            </label>
+            <input
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              placeholder="0.00"
+            />
+          </div>
+        )}
+        
+        {!initialReceiverAddress && (
+          <div>
+            <label className="block text-sm font-medium text-white">
+              Receiver Address
+            </label>
+            <input
+              type="text"
+              value={receiverAddress}
+              onChange={(e) => setReceiverAddress(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              placeholder="0x..."
+            />
+          </div>
+        )}
             
             <button
               onClick={sendPYUSD}
-              className="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition-colors"
+              className="w-full bg-blue-500 gap-2 flex flex-row align-center justify-center text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors"
             >
+              <FontAwesomeIcon icon={faPaypal} size="2x" />
               Send PYUSD
             </button>
           </div>

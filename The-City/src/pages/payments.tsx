@@ -4,13 +4,19 @@ import { useState } from 'react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { AlertCircle, CreditCard } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import CustomModal from '@/components/common/Modal'
+import PYUSDTransfer from '@/utils/pyusd/transfer'
+interface TabsTriggerProps {
+  value: string;
+  onClick: () => void;
+  isActive?: boolean; // Add this line
+  children: React.ReactNode;
+}
 
 // Mock data for bills and fines
 const mockBills = {
@@ -32,11 +38,16 @@ const mockBills = {
     { id: 'tax1', type: 'Property Tax', amount: 1200.00, dueDate: '2023-12-31' },
   ],
 }
-
+const addressMapping: Record<string, string> = {
+  utilities: '0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199', // pwd account
+  traffic: '0xdD2FD4581271e230360230F9337D5c0430Bf44C0', // police department account
+  environmental: '0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199', // pwd account
+  safety: '0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199', // pwd account
+  taxes: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266', // government official account
+};
 export default function UserBillsPage() {
   const [selectedBills, setSelectedBills] = useState<string[]>([])
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false)
-  const [paymentAmount, setPaymentAmount] = useState('')
 
   const handleBillSelection = (billId: string) => {
     setSelectedBills(prev => 
@@ -45,7 +56,15 @@ export default function UserBillsPage() {
         : [...prev, billId]
     )
   }
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   const calculateTotal = () => {
     return Object.values(mockBills)
       .flat()
@@ -54,18 +73,6 @@ export default function UserBillsPage() {
       .toFixed(2)
   }
 
-  const handlePaymentSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    const total = calculateTotal()
-    if (parseFloat(paymentAmount) < parseFloat(total)) {
-      alert("Payment amount must be at least the total of selected bills.")
-      return
-    }
-    alert(`Payment of $${paymentAmount} submitted successfully for selected bills!`)
-    setIsPaymentDialogOpen(false)
-    setPaymentAmount('')
-    setSelectedBills([])
-  }
 
   const renderBillsTable = (bills: typeof mockBills.utilities) => (
     <table className="w-full text-center">
@@ -96,6 +103,15 @@ export default function UserBillsPage() {
     </table>
   )
 
+  function getAddressFromList(): string {
+    return addressMapping[activeTab]
+  }
+  const [activeTab, setActiveTab] = useState<string>('utilities'); // Default active tab
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+  };
+
   return (
     <div className="container mx-auto p-4 space-y-4 bg-background text-foreground dark">
       <h1 className="text-3xl font-bold mb-4">Your Bills and Fines</h1>
@@ -110,11 +126,36 @@ export default function UserBillsPage() {
 
       <Tabs defaultValue="utilities" className="w-full">
         <TabsList>
-          <TabsTrigger value="utilities">Utilities</TabsTrigger>
-          <TabsTrigger value="traffic">Traffic</TabsTrigger>
-          <TabsTrigger value="environmental">Environmental</TabsTrigger>
-          <TabsTrigger value="safety">Safety</TabsTrigger>
-          <TabsTrigger value="taxes">Taxes</TabsTrigger>
+          <TabsTrigger
+            value="utilities"
+            onClick={() => handleTabChange('utilities')}
+          >
+            Utilities
+          </TabsTrigger>
+          <TabsTrigger
+            value="traffic"
+            onClick={() => handleTabChange('traffic')}
+          >
+            Traffic
+          </TabsTrigger>
+          <TabsTrigger
+            value="environmental"
+            onClick={() => handleTabChange('environmental')}
+          >
+            Environmental
+          </TabsTrigger>
+          <TabsTrigger
+            value="safety"
+            onClick={() => handleTabChange('safety')}
+          >
+            Safety
+          </TabsTrigger>
+          <TabsTrigger
+            value="taxes"
+            onClick={() => handleTabChange('taxes')}
+          >
+            Taxes
+          </TabsTrigger>
         </TabsList>
         <ScrollArea className="h-[400px] w-full rounded-md border p-4">
           <TabsContent value="utilities">
@@ -174,45 +215,17 @@ export default function UserBillsPage() {
           </TabsContent>
         </ScrollArea>
       </Tabs>
-
+      <CustomModal isOpen={isModalOpen} onRequestClose={closeModal}>
+        <PYUSDTransfer initialReceiverAddress={getAddressFromList()} initialAmount={calculateTotal()} />
+      </CustomModal>
       <div className="flex justify-between items-center mt-4">
         <p className="text-xl font-semibold">Total Selected: ${calculateTotal()}</p>
         <Dialog open={isPaymentDialogOpen} onOpenChange={setIsPaymentDialogOpen}>
           <DialogTrigger asChild>
-            <Button disabled={selectedBills.length === 0}>
+            <Button disabled={selectedBills.length === 0} onClick={openModal}>
               <CreditCard className="mr-2 h-4 w-4" /> Pay Selected Bills
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Pay Bills</DialogTitle>
-              <DialogDescription>
-                Enter the amount you wish to pay for the selected bills.
-              </DialogDescription>
-            </DialogHeader>
-            <form onSubmit={handlePaymentSubmit}>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="amount" className="text-right">
-                    Amount ($)
-                  </Label>
-                  <Input
-                    id="amount"
-                    type="number"
-                    value={paymentAmount}
-                    onChange={(e) => setPaymentAmount(e.target.value)}
-                    className="col-span-3"
-                    min={calculateTotal()}
-                    step="0.01"
-                    required
-                  />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button type="submit">Pay Now</Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
         </Dialog>
       </div>
     </div>

@@ -1,59 +1,90 @@
-"use client"
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { AlertTriangle, TrendingDown, TrendingUp, Plus } from 'lucide-react';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, Cell } from 'recharts';
 
-import { useState } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { AlertTriangle, TrendingDown, TrendingUp, Plus } from 'lucide-react'
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, Cell } from 'recharts'
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
 
-const initialCrimeData = [
-  { month: 'Jan', violent: 45, property: 120, cyber: 30 },
-  { month: 'Feb', violent: 50, property: 115, cyber: 35 },
-  { month: 'Mar', violent: 40, property: 130, cyber: 40 },
-  { month: 'Apr', violent: 55, property: 125, cyber: 38 },
-  { month: 'May', violent: 60, property: 140, cyber: 45 },
-  { month: 'Jun', violent: 52, property: 135, cyber: 50 },
-]
+interface CrimeData {
+  month: string;
+  violent: number;
+  property: number;
+  cyber: number;
+}
 
-const initialCrimeTypes = [
-  { name: 'Assault', value: 30 },
-  { name: 'Burglary', value: 25 },
-  { name: 'Theft', value: 20 },
-  { name: 'Fraud', value: 15 },
-  { name: 'Vandalism', value: 10 },
-]
-
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8']
+interface CrimeType {
+  name: string;
+  value: number;
+}
 
 export default function CrimesPage() {
-  const [crimeData, setCrimeData] = useState(initialCrimeData)
-  const [crimeTypes, setCrimeTypes] = useState(initialCrimeTypes)
-  const [selectedArea, setSelectedArea] = useState('downtown')
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [newCrimeData, setNewCrimeData] = useState({ month: '', violent: '', property: '', cyber: '' })
+  const [crimeData, setCrimeData] = useState<CrimeData[]>([]);
+  const [crimeTypes, setCrimeTypes] = useState<CrimeType[]>([]);
+  const [selectedArea, setSelectedArea] = useState('downtown');
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [newCrimeData, setNewCrimeData] = useState({ month: '', violent: '', property: '', cyber: '' });
+
+  useEffect(() => {
+    const fetchCrimeData = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/crime');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setCrimeData(data.crimeData || []);
+        setCrimeTypes(data.crimeTypes || []);
+      } catch (error) {
+        console.error('Failed to fetch crime data:', error);
+      }
+    };
+
+    fetchCrimeData();
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewCrimeData({ ...newCrimeData, [e.target.name]: e.target.value })
-  }
+    setNewCrimeData({ ...newCrimeData, [e.target.name]: e.target.value });
+  };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     const newData = {
       month: newCrimeData.month,
-      violent: parseInt(newCrimeData.violent),
-      property: parseInt(newCrimeData.property),
-      cyber: parseInt(newCrimeData.cyber),
+      violent: parseInt(newCrimeData.violent) || 0,
+      property: parseInt(newCrimeData.property) || 0,
+      cyber: parseInt(newCrimeData.cyber) || 0,
+    };
+
+    try {
+      const response = await fetch('http://localhost:3000/crime', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add crime data');
+      }
+
+      setCrimeData([...crimeData, newData]); 
+      setIsDialogOpen(false);
+      setNewCrimeData({ month: '', violent: '', property: '', cyber: '' });
+    } catch (error) {
+      console.error('Error adding crime data:', error);
     }
-    setCrimeData([...crimeData, newData])
-    setIsDialogOpen(false)
-    setNewCrimeData({ month: '', violent: '', property: '', cyber: '' })
-  }
+  };
+
+  const totalCrimes = crimeData.reduce((acc, curr) => acc + curr.violent + curr.property + curr.cyber, 0);
+  const mostCommonCrime = crimeTypes.reduce((prev, current) => (prev.value > current.value) ? prev : current, crimeTypes[0]);
 
   return (
     <div className="container mx-auto p-4 space-y-4 bg-background text-foreground dark">
@@ -74,9 +105,7 @@ export default function CrimesPage() {
             <form onSubmit={handleSubmit}>
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="month" className="text-right">
-                    Month
-                  </Label>
+                  <Label htmlFor="month" className="text-right">Month</Label>
                   <Input
                     id="month"
                     name="month"
@@ -87,9 +116,7 @@ export default function CrimesPage() {
                   />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="violent" className="text-right">
-                    Violent
-                  </Label>
+                  <Label htmlFor="violent" className="text-right">Violent</Label>
                   <Input
                     id="violent"
                     name="violent"
@@ -101,9 +128,7 @@ export default function CrimesPage() {
                   />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="property" className="text-right">
-                    Property
-                  </Label>
+                  <Label htmlFor="property" className="text-right">Property</Label>
                   <Input
                     id="property"
                     name="property"
@@ -115,9 +140,7 @@ export default function CrimesPage() {
                   />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="cyber" className="text-right">
-                    Cyber
-                  </Label>
+                  <Label htmlFor="cyber" className="text-right">Cyber</Label>
                   <Input
                     id="cyber"
                     name="cyber"
@@ -213,15 +236,11 @@ export default function CrimesPage() {
             <ul className="space-y-2">
               <li className="flex items-center justify-between">
                 <span>Total reported crimes (last 30 days):</span>
-                <Badge variant="outline">
-                  {crimeData.reduce((acc, curr) => acc + curr.violent + curr.property + curr.cyber, 0)}
-                </Badge>
+                <Badge variant="outline">{totalCrimes}</Badge>
               </li>
               <li className="flex items-center justify-between">
                 <span>Most common crime type:</span>
-                <Badge variant="outline" className="bg-primary text-primary-foreground">
-                  {crimeTypes.reduce((prev, current) => (prev.value > current.value) ? prev : current).name}
-                </Badge>
+                <Badge variant="outline" className="bg-primary text-primary-foreground">{mostCommonCrime?.name}</Badge>
               </li>
               <li className="flex items-center">
                 <TrendingDown className="h-4 w-4 mr-2 text-green-500" />
@@ -251,5 +270,5 @@ export default function CrimesPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
