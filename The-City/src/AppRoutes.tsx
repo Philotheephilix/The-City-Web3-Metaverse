@@ -17,7 +17,7 @@ import UserBillsPage from './pages/payments';
 import CombinedAnalyticsPage from './pages/subpages/analytics';
 import AnalyticsPage from './pages/subpages/markets';
 import ExpenditureVisual from './pages/Expenditure';
-import DataFetcher from './pages/temp/coinapi';
+import CoinApiPage from './pages/temp/coinapi';
 const AppRoutes: React.FC = () => {
   const location = useLocation();
   return (
@@ -42,7 +42,7 @@ const AppRoutes: React.FC = () => {
 
         <Route path="/analytics/:address" element={<CombinedAnalyticsPage/>}/>
         <Route path="/analytic/:address" element={<AnalyticsPage/>}/>
-        <Route path="/coinapi" element={<DataFetcher/>}/>
+        <Route path="/coinapi" element={<CoinApiPage/>}/>
         
         <Route path="/transfer" element={<PYUSDTransfer initialAmount='20'/>}/>
 
