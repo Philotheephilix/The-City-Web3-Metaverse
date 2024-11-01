@@ -1,24 +1,27 @@
-const { MongoClient } = require('mongodb');
+const { MongoClient, ServerApiVersion } = require('mongodb');
+require('dotenv').config();
 
-const uri = 'mongodb://localhost:27017';
-const client = new MongoClient(uri);
+const mongoURI = process.env.MONGODB_URI;
 let db;
 
-async function connectToDB() {
+const connectDB = async () => {
   try {
+    const client = new MongoClient(mongoURI, {
+      serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
+      }
+    });
     await client.connect();
     db = client.db('thoonga_nagaram');
     console.log('Connected to MongoDB');
   } catch (err) {
-    console.error('MongoDB connection error:', err);
+    console.error('Failed to connect to MongoDB', err);
+    process.exit(1);
   }
-}
-
-function getDB() {
-  return db;
-}
-
-module.exports = {
-  connectToDB,
-  getDB,
 };
+
+const getDB = () => db;
+
+module.exports = { connectDB, getDB };
