@@ -4,7 +4,6 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import BaseLayout from './components/layouts/BaseLayout';
 import Login from './pages/login';
 import Dashboard from './pages/temp/dashboard';
-import ToDo from './test/ToDo'
 import MapPreview from './components/map/TrafficMap';
 import CreativeMedicalRecordsPage from './pages/MedicalHistory' ;
 import CrimesPage from './pages/temp/crimes';
@@ -25,7 +24,6 @@ const AppRoutes: React.FC = () => {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/Login" element={<Login />} />
-        <Route path="/todo" element={<ToDo />} />
         <Route path="/traffic-map-preview" element={<MapPreview/>}/>
         <Route path="/medical" element={<CreativeMedicalRecordsPage/>}/>
         <Route path="/crime" element={<CrimesPage/>}/>
