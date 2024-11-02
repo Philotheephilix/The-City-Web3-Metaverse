@@ -12,9 +12,7 @@ export default defineConfig({
     'process.env.VITE_CONTRACT_ADDRESS': JSON.stringify(process.env.VITE_CONTRACT_ADDRESS),
     'process.env.VITE_NETWORK_ID': JSON.stringify(process.env.VITE_NETWORK_ID),
   },
-  build: {
-    rollupOptions: {
-      external: ['react-qr-code'],
-    },
+  optimizeDeps: {
+    include: ['react-qr-code'],
   },
 });
