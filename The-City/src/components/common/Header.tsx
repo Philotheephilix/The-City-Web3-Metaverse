@@ -45,7 +45,9 @@ export default function Header() {
                     <Button variant="ghost" size="icon" className="md:hidden mr-2">
                         <Menu className="h-5 w-5" />
                     </Button>
-                    <h1 className="text-2xl font-bold text-gray-800 dark:text-white ">THOONGA NAGARAM - The City</h1>
+                    <button onClick={()=>{navigate('/')}} className="bg-transparent border-3 border-white">
+                        <h1 className="text-2xl font-bold text-gray-800 dark:text-white ">THOONGA NAGARAM - The City</h1>
+                    </button>
                 </div>
                 <div className="flex items-center space-x-4 gap-2">
                     <MetaMaskButton/> 

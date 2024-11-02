@@ -1,0 +1,18 @@
+[{
+  "_id": {
+    "$oid": "6724d608035e96de7520e586"
+  },
+  "month": "January",
+  "violent": 66,
+  "property": 14,
+  "cyber": 60
+},
+{
+  "_id": {
+    "$oid": "6724d677035e96de7520e587"
+  },
+  "month": "January",
+  "violent": 42,
+  "property": 2332,
+  "cyber": 3333
+}]

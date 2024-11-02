@@ -3,3 +3,4 @@
 server/bun.lockb
 The-City/bun.lockb
 server/.env
+The-City/src/constants.tsx

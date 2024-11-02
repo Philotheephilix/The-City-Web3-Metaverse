@@ -1,0 +1,117 @@
+[{
+  "_id": {
+    "$oid": "6724d2fe9f8b5e4fe36bf65d"
+  },
+  "month": "Jan",
+  "violent": 45,
+  "property": 120,
+  "cyber": 30
+},
+{
+  "_id": {
+    "$oid": "6724d2fe9f8b5e4fe36bf65e"
+  },
+  "month": "Feb",
+  "violent": 50,
+  "property": 115,
+  "cyber": 35
+},
+{
+  "_id": {
+    "$oid": "6724d2fe9f8b5e4fe36bf65f"
+  },
+  "month": "Mar",
+  "violent": 40,
+  "property": 130,
+  "cyber": 40
+},
+{
+  "_id": {
+    "$oid": "6724d2fe9f8b5e4fe36bf660"
+  },
+  "month": "Apr",
+  "violent": 55,
+  "property": 125,
+  "cyber": 38
+},
+{
+  "_id": {
+    "$oid": "6724d2fe9f8b5e4fe36bf661"
+  },
+  "month": "May",
+  "violent": 60,
+  "property": 140,
+  "cyber": 45
+},
+{
+  "_id": {
+    "$oid": "6724d2fe9f8b5e4fe36bf662"
+  },
+  "month": "Jun",
+  "violent": 52,
+  "property": 135,
+  "cyber": 50
+},
+{
+  "_id": {
+    "$oid": "6724d2fe9f8b5e4fe36bf663"
+  },
+  "month": "Jul",
+  "violent": 58,
+  "property": 145,
+  "cyber": 48
+},
+{
+  "_id": {
+    "$oid": "6724d2fe9f8b5e4fe36bf664"
+  },
+  "month": "Aug",
+  "violent": 62,
+  "property": 150,
+  "cyber": 55
+},
+{
+  "_id": {
+    "$oid": "6724d2fe9f8b5e4fe36bf665"
+  },
+  "month": "Sep",
+  "violent": 54,
+  "property": 138,
+  "cyber": 47
+},
+{
+  "_id": {
+    "$oid": "6724d2fe9f8b5e4fe36bf666"
+  },
+  "month": "Oct",
+  "violent": 49,
+  "property": 125,
+  "cyber": 42
+},
+{
+  "_id": {
+    "$oid": "6724d2fe9f8b5e4fe36bf667"
+  },
+  "month": "Nov",
+  "violent": 51,
+  "property": 130,
+  "cyber": 39
+},
+{
+  "_id": {
+    "$oid": "6724d2fe9f8b5e4fe36bf668"
+  },
+  "month": "Dec",
+  "violent": 57,
+  "property": 140,
+  "cyber": 44
+},
+{
+  "_id": {
+    "$oid": "6724d6a93787dd4437f773e0"
+  },
+  "month": "January",
+  "violent": 123,
+  "property": 222,
+  "cyber": 134
+}]

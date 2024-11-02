@@ -9,7 +9,6 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 import { Loader2 } from "lucide-react"
 import { calculateStats, fetchTransactions } from "@/utils/covalent/History"
 import { ChartDataPoint, CovalentResponse, Transaction, TransactionStats } from "@/utils/covalent/Types"
-import { Button } from "@/components/ui/button"
 import CovalentLogo from "../assets/Covalent.svg"
 
 const DEPARTMENTS = [

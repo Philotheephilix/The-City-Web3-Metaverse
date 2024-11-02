@@ -131,7 +131,7 @@ const axios = require("axios");
     jsonrpc: "2.0",
     id: 1,
     method: "forex_getExchangeRate",
-    params: ["USD", ["EUR", "GBP", "JPY", "AUD", "CAD"]],
+    params: ["USD", ['INR',"EUR", "GBP", "JPY", "AUD", "CAD"]],
   };
   axios
     .post(

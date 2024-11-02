@@ -1,10 +1,9 @@
 "use client"
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from 'react'
-import { BarChart3, Droplets, Wind, Shield, Zap, DollarSign, PieChart, UserCog, Hospital, CreditCard, AlertCircle, FileText, Activity, TrendingUp, IndianRupeeIcon } from 'lucide-react'
+import { BarChart3, Droplets, Wind, Shield, Zap, DollarSign, PieChart, Hospital, CreditCard, AlertCircle, FileText, Activity, TrendingUp, IndianRupeeIcon } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Switch } from "@/components/ui/switch"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 import TrafficMap from './TrafficMap'
@@ -42,7 +41,6 @@ const fetchTransactionHistory = async (address: string): Promise<Transaction[]> 
 };
 
 export default function Dashboard() {
-  const [userRole, setUserRole] = useState('admin')
   const [, setIsLoggedIn] = useState(false)
   const [, setTransactions] = useState<Transaction[]>([]);
   const [gasFee, setGasFee] = useState<string>('0')
@@ -105,21 +103,6 @@ export default function Dashboard() {
               </li>
             ))}
           </ul>
-          <div className="absolute bottom-4 left-4 right-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-400">{localStorage.getItem('username')}</span>
-              <div className="flex items-center space-x-2">
-                <Switch
-                  checked={userRole === 'admin'}
-                  onCheckedChange={() => setUserRole(userRole === 'admin' ? 'user' : 'admin')}
-                />
-                <UserCog className="h-4 w-4 text-gray-400" />
-              </div>
-            </div>
-            <p className="text-xs text-gray-500 mt-1">
-              {userRole === 'admin' ? 'Admin Access' : 'User Access'}
-            </p>
-          </div>
         </nav>
 
         {/* Main Content */}

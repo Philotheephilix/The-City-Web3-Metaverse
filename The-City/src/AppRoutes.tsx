@@ -18,6 +18,7 @@ import CombinedAnalyticsPage from './pages/subpages/analytics';
 import AnalyticsPage from './pages/subpages/markets';
 import ExpenditureVisual from './pages/Expenditure';
 import CoinApiPage from './pages/temp/coinapi';
+import ExchangeRate from './pages/subpages/Exchange';
 const AppRoutes: React.FC = () => {
   const location = useLocation();
   return (
@@ -43,7 +44,7 @@ const AppRoutes: React.FC = () => {
         <Route path="/finance/:address" element={<CombinedAnalyticsPage addresss={localStorage.getItem('eth-add') || ''}/>}/>
         <Route path="/analytic/" element={<AnalyticsPage/>}/>
         <Route path="/coinapi" element={<CoinApiPage/>}/>
-        
+        <Route path='/exchange' element={<ExchangeRate/>}/>
         <Route path="/transfer" element={<PYUSDTransfer initialAmount='20'/>}/>
 
        </Routes>

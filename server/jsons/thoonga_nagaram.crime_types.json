@@ -1,0 +1,35 @@
+[{
+  "_id": {
+    "$oid": "6724d4699f8b5e4fe36bf678"
+  },
+  "name": "Assault",
+  "value": 30
+},
+{
+  "_id": {
+    "$oid": "6724d4699f8b5e4fe36bf679"
+  },
+  "name": "Burglary",
+  "value": 25
+},
+{
+  "_id": {
+    "$oid": "6724d4699f8b5e4fe36bf67a"
+  },
+  "name": "Theft",
+  "value": 20
+},
+{
+  "_id": {
+    "$oid": "6724d4699f8b5e4fe36bf67b"
+  },
+  "name": "Fraud",
+  "value": 15
+},
+{
+  "_id": {
+    "$oid": "6724d4699f8b5e4fe36bf67c"
+  },
+  "name": "Vandalism",
+  "value": 10
+}]
