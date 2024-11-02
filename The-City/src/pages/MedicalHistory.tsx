@@ -1,10 +1,10 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import { FileText, Image as ImageIcon, Share2 } from 'lucide-react'
+import { FileText, Image as ImageIcon, PlusCircle, Share2 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -50,6 +50,22 @@ export default function CreativeMedicalRecordsPage() {
   const [showQR, setShowQR] = useState(false)
   let anonid = localStorage.getItem('userId')?localStorage.getItem('userId'):"";
 
+  const handleTextRecordSubmit = async () => {
+    if (newTextRecord.title && newTextRecord.content) {
+      const newRecord: MedicalRecord = {
+        id: Date.now().toString(),
+        name: newTextRecord.title,
+        date: new Date().toISOString().split('T')[0],
+        type: 'TEXT',
+        size: `${newTextRecord.content.length} chars`,
+        content: newTextRecord.content,
+        userId:anonid?anonid:"",
+      }
+      await axios.post(`${API_URL}/med`,newRecord);
+      setRecords([...records, newRecord])
+      setNewTextRecord({ title: '', content: '' })
+    }
+  }
 
   useEffect(() => {
     const fetchRecords = async () => {
@@ -130,7 +146,9 @@ export default function CreativeMedicalRecordsPage() {
                 </div>
               </div>
             </CardContent>
-            
+            <CardFooter  className='flex justify-center'>
+              <Button onClick={handleTextRecordSubmit}><PlusCircle className="mr-2 h-4 w-4" /> Add Text Record</Button>
+            </CardFooter>
           </Card>
         </TabsContent>
         <TabsContent value="image">
