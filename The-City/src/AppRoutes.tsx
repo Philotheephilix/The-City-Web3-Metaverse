@@ -19,6 +19,7 @@ import AnalyticsPage from './pages/subpages/markets';
 import ExpenditureVisual from './pages/Expenditure';
 import CoinApiPage from './pages/temp/coinapi';
 import ExchangeRate from './pages/subpages/Exchange';
+import FeedbackPage from './utils/quicknode/feedback';
 const AppRoutes: React.FC = () => {
   const location = useLocation();
   return (
@@ -34,6 +35,7 @@ const AppRoutes: React.FC = () => {
         <Route path="/public-safety" element={<PublicSafetyPage/>}/>
 
         <Route path="/public-expenditure" element={<ExpenditureVisual/>}/>
+        <Route path="/feedback" element={<FeedbackPage/>}/>
 
         <Route path="/air" element={<AirQualityIndexPage/>}/>
         <Route path="/utilities" element={<UtilitiesUsagePage/>}/>
