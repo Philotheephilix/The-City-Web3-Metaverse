@@ -5,6 +5,14 @@ import { BarChart3, Droplets, Wind, Shield, Zap, DollarSign, PieChart, Hospital,
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { FaArrowRightToBracket } from "react-icons/fa6";
+import { BsBoxArrowInLeft } from "react-icons/bs";
+import { PiPaypalLogoBold } from "react-icons/pi";
+import { FaEthereum } from "react-icons/fa";
+import { FaPaypal } from "react-icons/fa";
+import { FaArrowRightArrowLeft } from "react-icons/fa6";
+
+import QRCode from "react-qr-code";
 
 import TrafficMap from './TrafficMap'
 import UtilitiesGraph from './UtilitiesGraph'
@@ -22,6 +30,8 @@ interface Transaction {
 }
 import CombinedAnalyticsPage from "../subpages/analytics"
 import GasFeeDisplay from "@/components/GasFeeDisplay"
+import CustomModal from "@/components/common/Modal"
+import PYUSDTransfer from "@/utils/pyusd/transfer"
 const NOVES_API_KEY = import.meta.env.VITE_NOVES_TRANSLATE_API_KEY;
 const fetchTransactionHistory = async (address: string): Promise<Transaction[]> => {
   const options = {
@@ -71,8 +81,16 @@ export default function Dashboard() {
       setIsLoggedIn(false);
     }
   }, []);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+  const [isReceiveModalOpen, setIsReceiveModalOpen] = useState<boolean>(false);
 
+  const closeReceiveModal = () => {
+    setIsReceiveModalOpen(false);
+  };
   return (
     <div className={`flex flex-col h-screen dark`}>
 
@@ -185,7 +203,7 @@ export default function Dashboard() {
                       Use secure payment methods with encryption and protection for all transactions. 
                     </p>
                     <p className="text-sm text-center text-gray-600">
-                      Accepted cards: Visa, Mastercard, Amex
+                      Accepted cards: PYUSD, EVM
                     </p>
 
                     {/* Payment Button */}
@@ -194,7 +212,42 @@ export default function Dashboard() {
                     </Button>
                   </CardContent>
                 </Card>
-
+                <Card >
+                  <CardHeader>
+                    <CardTitle className="text-xl">Transfer With <span className="text-red-500">Love ❤️</span></CardTitle>
+                    <CardDescription>Transfer PYUSD within Seconds</CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex flex-col gap-8  h-full">
+                    <div className="flex flex-row text-7xl gap-2 align-center justify-center w-full">
+                      <FaEthereum className="text-green-400"/><FaArrowRightArrowLeft className="text-slate-400"/><FaPaypal className="text-blue-400"/>
+                    </div>
+                    <Button 
+                      onClick={()=>{setIsModalOpen(true)}}
+                      className="bg-blue-500 hover:bg-blue-800 transition-all"
+                      >
+                        SEND
+                        <FaArrowRightToBracket />
+                    </Button>
+                     <Button
+                      className="bg-green-500 hover:bg-green-800 transition-all"
+                      onClick={()=>{setIsReceiveModalOpen(true)}}
+                      >
+                        RECEIVE
+                        <BsBoxArrowInLeft />
+                        </Button>
+                      <Button className="w-[max-content] bg-transparent text-grey-500 hover:bg-transparent">
+                        Powered By
+                        <PiPaypalLogoBold />
+                      </Button>
+                  </CardContent>
+                </Card>
+                <CustomModal isOpen={isModalOpen} onRequestClose={closeModal}>
+                  <PYUSDTransfer />
+                </CustomModal>
+                <CustomModal isOpen={isReceiveModalOpen} onRequestClose={closeReceiveModal} >
+                  <QRCode className="p-8" value={localStorage.getItem('eth-add') || 'Invalid address'} />
+                  <span className="text-white flex align-center w-full justify-center">Scan For PYUSD Address [EVM]</span>
+                </CustomModal>
                 {/* New Crimes Card */}
                 <Card onClick={() => navigate('crime')}>
                   <CardHeader>

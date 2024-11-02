@@ -9,6 +9,7 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { AlertCircle, CreditCard } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+
 import CustomModal from '@/components/common/Modal'
 import PYUSDTransfer from '@/utils/pyusd/transfer'
 
