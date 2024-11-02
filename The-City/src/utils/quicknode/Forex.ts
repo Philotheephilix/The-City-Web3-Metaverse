@@ -11,7 +11,7 @@ const data = {
   jsonrpc: "2.0",
   id: 1,
   method: "forex_getExchangeRate",
-  params: ["USD", ["INR", "EUR", "GBP", "JPY", "AUD", "CAD"]],
+  params: ["USD", ["INR", "EUR", "GBP", "JPY", "AUD", "CAD","AED","HKD","MXN","TRY","ZAR"]],
 };
 
 export const getForex = async (): Promise<DashboardProps> => {  
