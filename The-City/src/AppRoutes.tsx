@@ -40,8 +40,8 @@ const AppRoutes: React.FC = () => {
 
         <Route path="/pay" element={<UserBillsPage/>}/>
 
-        <Route path="/analytics/:address" element={<CombinedAnalyticsPage addresss={localStorage.getItem('eth-add') || ''}/>}/>
-        <Route path="/analytic/:address" element={<AnalyticsPage/>}/>
+        <Route path="/finance/:address" element={<CombinedAnalyticsPage addresss={localStorage.getItem('eth-add') || ''}/>}/>
+        <Route path="/analytic/" element={<AnalyticsPage/>}/>
         <Route path="/coinapi" element={<CoinApiPage/>}/>
         
         <Route path="/transfer" element={<PYUSDTransfer initialAmount='20'/>}/>

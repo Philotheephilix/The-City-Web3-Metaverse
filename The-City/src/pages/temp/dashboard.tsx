@@ -67,7 +67,7 @@ export default function Dashboard() {
 
       <div className="flex flex-1 overflow-hidden">
         {/* Navigation Sidebar */}
-        <nav className="w-64 bg-gray-900 text-white p-4 hidden md:block">
+        <nav className="w-64 bg-black text-white p-4 hidden md:block ">
           <ul className="space-y-2">
             {[
              { icon: BarChart3, label: 'Traffic', path: '/traffic' },
@@ -75,8 +75,8 @@ export default function Dashboard() {
              { icon: Wind, label: 'Air Quality', path: '/air' },
              { icon: Shield, label: 'Public Safety', path: '/public-safety' },
              { icon: Zap, label: 'Energy Use', path: '/energy' },
-             { icon: DollarSign, label: 'Financial', path: '/financial' },
-             { icon: PieChart, label: 'Analytics', path: '/analytics' },
+             { icon: DollarSign, label: 'Financial', path: '/finance/0x974CaA59e49682CdA0AD2bbe82983419A2ECC400' },
+             { icon: PieChart, label: 'Analytics', path: '/analytic' },
              { icon: Hospital, label: 'Medical History', path: '/medical' },
              { icon: IndianRupeeIcon, label: 'Government Expenditure', path: '/public-expenditure' }
            ].map(({ icon: Icon, label, path }) => (
@@ -110,7 +110,7 @@ export default function Dashboard() {
         </nav>
 
         {/* Main Content */}
-        <main className="flex-1 bg-gray-100 dark:bg-gray-800 overflow-hidden">
+        <main className="flex-1 bg-gray-900 dark:bg-gray-900 overflow-hidden">
           <ScrollArea className="h-full">
             <div className="p-6 space-y-6">
               <h2 className="text-3xl font-bold text-gray-800 dark:text-white">City Overview</h2>
@@ -235,12 +235,9 @@ export default function Dashboard() {
 
               {/* Financial Module */}
               <Card>
-                  <CardHeader>
-                    <CardTitle>Recent Transactions</CardTitle>
-                    <CardDescription>Your latest transaction activity.</CardDescription>
-                  </CardHeader>
+                  
                   <CardContent>
-                    <CombinedAnalyticsPage addresss={localStorage.getItem('eth-add') || ''} />
+                    <CombinedAnalyticsPage addresss={localStorage.getItem('eth-add') || '0x974CaA59e49682CdA0AD2bbe82983419A2ECC400'} />
                   </CardContent>
                 </Card>
 

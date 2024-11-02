@@ -101,13 +101,15 @@ const prepareChartData = (transactions: Transaction[]): ChartDataPoint[] => {
 }
 
 const renderTransactions = (transactions: Transaction[], activeTab: "incoming" | "outgoing") => (
-  <Table>
-    <TableHeader className="text-slate-300">
+  <div>
+    <h2 className="mt-8 text-2xl text-bold">Government Transactions </h2>
+  <Table className="bg-black p-2">
+    <TableHeader className="text-white bg-black">
       <TableRow>
-        <TableHead className="text-slate-300">Date</TableHead>
-        <TableHead className="text-slate-300">From/To</TableHead>
-        <TableHead className="text-right text-slate-300">Amount (USD)</TableHead>
-        <TableHead className="text-right text-slate-300">Gas Fee (USD)</TableHead>
+        <TableHead className="text-white">Date</TableHead>
+        <TableHead className="text-white">From/To</TableHead>
+        <TableHead className="text-right text-white">Amount (USD)</TableHead>
+        <TableHead className="text-right text-white">Gas Fee (USD)</TableHead>
       </TableRow>
     </TableHeader>
     <TableBody>
@@ -126,6 +128,7 @@ const renderTransactions = (transactions: Transaction[], activeTab: "incoming" |
       ))}
     </TableBody>
   </Table>
+  </div>
 )
 
 const renderChart = (transactions: Transaction[]) => (
@@ -143,7 +146,7 @@ const renderChart = (transactions: Transaction[]) => (
 
 const renderStats = (stats: TransactionStats) => (
   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-    <Card className="bg-gray-700 border-gray-600">
+    <Card className="bg-gray-300 border-gray-600">
       <CardHeader>
         <CardTitle className="text-sm">Total Volume</CardTitle>
       </CardHeader>
@@ -151,7 +154,7 @@ const renderStats = (stats: TransactionStats) => (
         <p className="text-2xl font-bold">${stats.total}</p>
       </CardContent>
     </Card>
-    <Card className="bg-gray-700 border-gray-600">
+    <Card className="bg-gray-300 border-gray-600">
       <CardHeader>
         <CardTitle className="text-sm">Transaction Count</CardTitle>
       </CardHeader>
@@ -159,7 +162,7 @@ const renderStats = (stats: TransactionStats) => (
         <p className="text-2xl font-bold">{stats.count}</p>
       </CardContent>
     </Card>
-    <Card className="bg-gray-700 border-gray-600">
+    <Card className="bg-gray-300 border-gray-600">
       <CardHeader>
         <CardTitle className="text-sm">Average Value</CardTitle>
       </CardHeader>
@@ -167,7 +170,7 @@ const renderStats = (stats: TransactionStats) => (
         <p className="text-2xl font-bold">${stats.average}</p>
       </CardContent>
     </Card>
-    <Card className="bg-gray-700 border-gray-600">
+    <Card className="bg-gray-300 border-gray-600">
       <CardHeader>
         <CardTitle className="text-sm">Total Gas Spent</CardTitle>
       </CardHeader>
@@ -202,7 +205,7 @@ export default function TransactionDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-8 w-8 animate-spin" />
           <p>Loading transaction data...</p>
@@ -242,10 +245,10 @@ export default function TransactionDashboard() {
   const outgoingStats = calculateStats(outgoing)
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-8">
-      <Card className="bg-gray-800 border-gray-700 mb-8">
+    <div className="min-h-screen bg-black text-white px-32 py-4 m-auto">
+      <Card className="bg-gray-800 border-gray-900 mb-8">
         <CardHeader>
-          <CardTitle className="text-xl text-slate-400">Department Dashboard</CardTitle>
+          <CardTitle className="text-xl text-white">Department Dashboard</CardTitle>
           <CardDescription className="text-slate-300">
             Viewing wallet for: 
             <select 
@@ -254,7 +257,7 @@ export default function TransactionDashboard() {
                 const selectedDept = DEPARTMENTS.find(dept => dept.name === e.target.value)
                 if (selectedDept) setActiveDepartment(selectedDept)
               }}
-              className="bg-gray-300 text-black ml-2 p-2 rounded-lg"
+              className="bg-white text-black ml-2 p-2 rounded-lg"
             >
               {DEPARTMENTS.map(dept => (
                 <option key={dept.walletAddress} value={dept.name}>
@@ -266,7 +269,7 @@ export default function TransactionDashboard() {
         </CardHeader>
       </Card>
       
-      <Tabs value={activeTab}  onValueChange={(val) => setActiveTab(val as "incoming" | "outgoing")}>
+      <Tabs value={activeTab}  onValueChange={(val) => setActiveTab(val as "incoming" | "outgoing")} className="mb-2">
         <TabsList>
           <TabsTrigger value="incoming">Incoming</TabsTrigger>
           <TabsTrigger value="outgoing">Outgoing</TabsTrigger>

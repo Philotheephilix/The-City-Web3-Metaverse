@@ -7,7 +7,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } fro
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { format } from 'date-fns'
 import { ArrowUpRight, ArrowDownRight, Clock, Zap, Database, Blocks, Wallet, Activity } from 'lucide-react'
-
+import EnhancedCryptoDashboard from '../temp/coinapi'
 type Chain = 'ETH' | 'BASE' | "OPTI"
 
 const API_ENDPOINTS: Record<Chain, string> = {
@@ -182,7 +182,7 @@ export default function Component() {
 
   return (
     <div className="container mx-auto p-4 dark">
-      <Card className="w-full bg-background text-foreground">
+      <Card className="w-full bg-background text-foreground mb-10">
         <CardHeader>
           <CardTitle>Blockchain Analytics</CardTitle>
           <CardDescription>Market cap analysis and statistics for different cryptocurrencies</CardDescription>
@@ -221,6 +221,7 @@ export default function Component() {
           )}
         </CardContent>
       </Card>
+      <EnhancedCryptoDashboard/>
     </div>
   )
 }

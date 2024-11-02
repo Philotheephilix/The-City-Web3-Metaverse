@@ -74,18 +74,21 @@ const Login: React.FC = () => {
 
   return (
     <div className='login flex'>
-      <div className='bg-gray-900' style={{height:"100vh",width:"50vw",display:"flex",justifyContent:"center",alignItems:"center",flexDirection:"column"}}>
+      <div className='bg-black' style={{height:"90vh",width:"50vw",display:"flex",justifyContent:"center",alignItems:"center",flexDirection:"column"}}>
         <div style={{display:"flex",justifyContent:"center",alignItems:"center",flexDirection:"column"}}>
+          <h1 style={{color:"#fff",fontSize:"32px",fontWeight:"900"}} >THOONGA NAGARAM </h1>
+          <br />
+          <br />
           <div style={{color:"#fff",fontSize:"21px",fontWeight:"500"}}>Step into the Web3 Metaverse: Where your imagination builds the future!</div>
           <div style={{color:"#fff",fontSize:"19px",fontWeight:"300"}}>With great decentralization comes great innovation</div>
         </div>
       </div>
-      <div className='login--component bg-gray-800 gap-6' style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width: "50vw" }}>
+      <div className='login--component bg-gray-900 gap-6' style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width: "50vw" }}>
         <input 
           type="text" 
           name='login--username' 
           placeholder='Enter Username ' 
-          className='h-[6vh] border p-2 shadow-lg rounded-lg'
+          className='h-[6vh] border p-2 shadow-lg rounded-lg text-white'
           value={username}
           onChange={(e) => setUsername(e.target.value)} 
         />

@@ -38,13 +38,13 @@ export default function Header() {
 
     return (
         <div className={`flex flex-col dark`}>
-        <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-            <div className="flex items-center justify-between px-4 py-3">
+        <header className="bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800">
+            <div className="flex items-center justify-between px-6 py-5">
                 <div className="flex items-center">
                     <Button variant="ghost" size="icon" className="md:hidden mr-2">
                         <Menu className="h-5 w-5" />
                     </Button>
-                    <h1 className="text-2xl font-bold text-gray-800 dark:text-white">CityVerse Dashboard</h1>
+                    <h1 className="text-2xl font-bold text-gray-800 dark:text-white ">THOONGA NAGARAM - The City</h1>
                 </div>
                 <div className="flex items-center space-x-4">
                     

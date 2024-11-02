@@ -105,11 +105,11 @@ export default function EnhancedCryptoDashboard() {
   }))
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 p-8">
+    <div className="min-h-screen bg-black text-gray-100 p-8 border rounded-lg">
       <h1 className="text-3xl font-bold mb-8 text-center">Crypto Analytics Dashboard</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <Card className="bg-gray-800 border-gray-700">
+        <Card className="bg-black border-grey-800">
           <CardHeader>
             <CardTitle>Order Book Visualization (BCH/USD)</CardTitle>
             <CardDescription>Top 10 bids and asks</CardDescription>
@@ -143,7 +143,7 @@ export default function EnhancedCryptoDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-800 border-gray-700">
+        <Card className="bg-black border-grey-800">
           <CardHeader>
             <CardTitle>BTC/USD Price Movements</CardTitle>
             <CardDescription>Ask, Bid, and Trade prices over time</CardDescription>
@@ -187,7 +187,7 @@ export default function EnhancedCryptoDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-800 border-gray-700 col-span-1 md:col-span-2">
+        <Card className="bg-black border-grey-800 col-span-1 md:col-span-2">
           <CardHeader>
             <CardTitle>Recent BTC/USD Quotes</CardTitle>
             <CardDescription>Latest market data</CardDescription>
