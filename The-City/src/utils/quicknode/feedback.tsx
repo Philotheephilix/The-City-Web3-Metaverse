@@ -138,7 +138,6 @@ export default function FeedbackPage() {
       }
     } catch (error) {
       console.error('Submit error:', error);
-      toast.error(error instanceof Error ? error.message : 'Failed to submit feedback. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -175,7 +174,7 @@ export default function FeedbackPage() {
       </motion.div>
 
       <div className="max-w-4xl mx-auto">
-        <Card className="mb-8 bg-gray-900 border-gray-800">
+        <Card className="mb-8 bg-black border-gray-300">
           <CardHeader>
             <CardTitle className="text-2xl text-gray-100">Submit Your Feedback</CardTitle>
           </CardHeader>
@@ -189,7 +188,7 @@ export default function FeedbackPage() {
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
                   required
-                  className="bg-gray-800 border-gray-700 text-gray-100 placeholder-gray-500"
+                  className="bg-black border-gray-700 text-gray-100 placeholder-gray-500"
                   disabled={isSubmitting}
                 />
               </div>
@@ -200,10 +199,10 @@ export default function FeedbackPage() {
                   onValueChange={setCategory} 
                   disabled={isSubmitting}
                 >
-                  <SelectTrigger className="bg-gray-800 border-gray-700 text-gray-100">
+                  <SelectTrigger className="bg-black border-gray-700 text-gray-100 mb-7">
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
-                  <SelectContent className="bg-gray-800 border-gray-700">
+                  <SelectContent className="bg-black border-gray-700">
                     <SelectItem value="environment">Environment</SelectItem>
                     <SelectItem value="transportation">Transportation</SelectItem>
                     <SelectItem value="education">Education</SelectItem>
@@ -217,8 +216,8 @@ export default function FeedbackPage() {
                 disabled={isSubmitting || !isValidInput}
                 className={`w-full ${
                   isValidInput 
-                    ? 'bg-blue-600 hover:bg-blue-700' 
-                    : 'bg-blue-400 cursor-not-allowed'
+                    ? 'bg-green-600 hover:bg-green-700' 
+                    : 'bg-green-400 cursor-not-allowed'
                 } text-white transition-colors duration-200`}
               >
                 {isSubmitting ? (
@@ -244,11 +243,11 @@ export default function FeedbackPage() {
         >
           <h2 className="text-2xl font-bold mb-4 text-gray-100">Previous Feedback</h2>
           {isLoading ? (
-            <Card className="bg-gray-900 border-gray-800 p-4">
+            <Card className="bg-black border-gray-400 p-4">
               <p className="text-center">Loading comments...</p>
             </Card>
           ) : previousComments.length === 0 ? (
-            <Card className="bg-gray-900 border-gray-800 p-4">
+            <Card className="bg-black border-gray-800 p-4">
               <p className="text-center">No comments yet. Be the first to leave feedback!</p>
             </Card>
           ) : (
@@ -278,22 +277,7 @@ export default function FeedbackPage() {
         </motion.div>
       </div>
 
-      <motion.div
-        className="fixed bottom-4 right-4"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1, duration: 0.5 }}
-      >
-        <Button 
-          variant="outline" 
-          className="bg-gray-800 hover:bg-gray-700 text-gray-300 border-gray-700"
-          onClick={handleLoadMore}
-          disabled={isLoading}
-        >
-          <ChevronDown className="mr-2 h-4 w-4" /> 
-          {isLoading ? 'Loading...' : 'More Feedback'}
-        </Button>
-      </motion.div>
+      
     </div>
   )
 }

@@ -1,7 +1,7 @@
 "use client"
 import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from 'react'
-import { BarChart3, Droplets, Wind, Shield, Zap, DollarSign, PieChart, Hospital, CreditCard, AlertCircle, FileText, Activity, TrendingUp, IndianRupeeIcon } from 'lucide-react'
+import { BarChart3, Droplets, Wind, Shield, Zap, DollarSign, PieChart, Hospital, CreditCard, AlertCircle, FileText, Activity, TrendingUp, IndianRupeeIcon,MessageSquareHeart } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -108,7 +108,9 @@ export default function Dashboard() {
              { icon: DollarSign, label: 'Financial', path: '/finance/0x974CaA59e49682CdA0AD2bbe82983419A2ECC400' },
              { icon: PieChart, label: 'Analytics', path: '/analytic' },
              { icon: Hospital, label: 'Medical History', path: '/medical' },
-             { icon: IndianRupeeIcon, label: 'Government Expenditure', path: '/public-expenditure' }
+             { icon: IndianRupeeIcon, label: 'Government Expenditure', path: '/public-expenditure' },
+             { icon: MessageSquareHeart, label: 'Feedbacks', path: '/feedback' }
+
            ].map(({ icon: Icon, label, path }) => (
              <li key={label}>
                <Button
