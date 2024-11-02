@@ -53,21 +53,8 @@ async function fetchWithHeaders(action: 'submit' | 'list', data?: { category: st
       headers,
       body: JSON.stringify(body)
     });
-    console.log(response)
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
-    }
 
     const result = await response.json();
-    // Check if the response has a result property
-    if (result.result !== undefined) {
-      return {
-        success: true,
-        data: result.result
-      };
-    }
     return result;
   } catch (error) {
     console.error('API call failed:', error);
@@ -85,11 +72,16 @@ export default function FeedbackPage() {
   const fetchPreviousComments = async () => {
     try {
       const response = await fetchWithHeaders('list');
-      if (response.success && response.data) {
-        // Ensure the data is in the correct format
-        const formattedComments = Array.isArray(response.data) 
-          ? response.data 
-          : [response.data].filter(Boolean);
+      if (response.feedback) {
+        const formattedComments = response.feedback.map((item: { data: { items: any } }) => {
+          const feedbackData = item.data.items;
+          console.log(feedbackData)
+          return {
+            id: feedbackData[0],
+            category: feedbackData[2],
+            comment: feedbackData[3]
+          };
+        });
         setPreviousComments(formattedComments);
       }
     } catch (error) {
