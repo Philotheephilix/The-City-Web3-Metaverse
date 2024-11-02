@@ -251,7 +251,7 @@ export default function FeedbackPage() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}
                 >
-                  <Card className="bg-gray-900 border-gray-800">
+                  <Card className="bg-gray-900 border-black">
                     <CardContent className="p-4">
                       <div className="flex items-start space-x-4">
                         <MessageSquare className="h-6 w-6 mt-1 text-blue-400" />
