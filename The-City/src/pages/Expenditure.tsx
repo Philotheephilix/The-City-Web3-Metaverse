@@ -7,49 +7,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
 import { Loader2 } from "lucide-react"
-
-interface GasMetadata {
-  contract_decimals: number
-  contract_name: string
-  contract_ticker_symbol: string
-  contract_address: string
-  supports_erc: string[]
-  logo_url: string
-}
-
-interface Transaction {
-  block_signed_at: string
-  block_height: number
-  tx_hash: string
-  tx_offset: number
-  successful: boolean
-  from_address: string
-  to_address: string
-  value: string
-  value_quote: number
-  gas_quote: number
-  gas_metadata: GasMetadata
-  gas_price: number
-  fees_paid: string
-}
-
-interface CovalentResponse {
-  address: string
-  updated_at: string
-  next_update_at: string
-  quote_currency: string
-  chain_id: number
-  items: Transaction[]
-}
-
-interface TransactionStats {
-  total: string
-  average: string
-  count: number
-  totalGas: string
-}
-
-const API_KEY = "cqt_rQP7QrcrkRVPtVFc6vCPxcKYQBpk"
+import { calculateStats, fetchTransactions } from "@/utils/covalent/History"
+import { ChartDataPoint, CovalentResponse, Transaction, TransactionStats } from "@/utils/covalent/Types"
+import { Button } from "@/components/ui/button"
+import CovalentLogo from "../assets/Covalent.svg"
 
 const DEPARTMENTS = [
   { name: 'PWD', walletAddress: '0x3fA87a4D992196498f721371617ABC1fFbb6d2b5' },
@@ -59,38 +20,6 @@ const DEPARTMENTS = [
 
 const formatDate = (dateString: string): string => {
   return new Date(dateString).toLocaleDateString()
-}
-
-const fetchTransactions = async (walletAddress: string): Promise<CovalentResponse> => {
-  const API_URL = `https://api.covalenthq.com/v1/eth-mainnet/address/${walletAddress}/transactions_v2/?key=${API_KEY}`
-  
-  try {
-    const response = await fetch(API_URL)
-    if (!response.ok) throw new Error("Failed to fetch data")
-    const data = await response.json()
-    return data.data
-  } catch (error) {
-    console.error("API call failed:", error)
-    throw error
-  }
-}
-
-const calculateStats = (transactions: Transaction[]): TransactionStats => {
-  const total = transactions.reduce((sum, tx) => sum + parseFloat(tx.value_quote.toString()), 0)
-  const avgValue = total / transactions.length
-  const totalGas = transactions.reduce((sum, tx) => sum + parseFloat(tx.gas_quote.toString()), 0)
-  
-  return {
-    total: total.toFixed(2),
-    average: avgValue.toFixed(2),
-    count: transactions.length,
-    totalGas: totalGas.toFixed(2)
-  }
-}
-
-interface ChartDataPoint {
-  date: string
-  amount: number
 }
 
 const prepareChartData = (transactions: Transaction[]): ChartDataPoint[] => {
@@ -247,7 +176,10 @@ export default function TransactionDashboard() {
   return (
     <div className="min-h-screen bg-black text-white px-32 py-4 m-auto">
       <Card className="bg-gray-800 border-gray-900 mb-8">
-        <CardHeader>
+        <CardHeader className="flex flex-row justify-around">
+          <div></div>
+          <div></div>
+          <div>
           <CardTitle className="text-xl text-white">Department Dashboard</CardTitle>
           <CardDescription className="text-slate-300">
             Viewing wallet for: 
@@ -266,6 +198,10 @@ export default function TransactionDashboard() {
               ))}
             </select>
           </CardDescription>
+          </div>
+          <div  className="px-4 py-4 w-32 bg-black border-white text-white rounded-md  hover:bg-black">
+              <img src={CovalentLogo} alt=""  />
+          </div>
         </CardHeader>
       </Card>
       

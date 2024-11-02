@@ -14,13 +14,14 @@ import SafetyAlerts from './SafetyAlerts'
 import EnergyUsage from './EnergyUsage'
 import DataAnalytics from './DataAnalytics'
 import axios from "axios";
-
+import {getGasFeesInEth} from '../../utils/quicknode/GasEstimation'
 interface Transaction {
   transactionHash: string;
   blockNumber: number;
   timestamp: number;
 }
 import CombinedAnalyticsPage from "../subpages/analytics"
+import GasFeeDisplay from "@/components/GasFeeDisplay"
 const NOVES_API_KEY = import.meta.env.VITE_NOVES_TRANSLATE_API_KEY;
 const fetchTransactionHistory = async (address: string): Promise<Transaction[]> => {
   const options = {
@@ -44,9 +45,21 @@ export default function Dashboard() {
   const [userRole, setUserRole] = useState('admin')
   const [, setIsLoggedIn] = useState(false)
   const [, setTransactions] = useState<Transaction[]>([]);
+  const [gasFee, setGasFee] = useState<string>('0')
   const navigate = useNavigate()
   
   useEffect(() => {
+    const fetchGasFee = async () => {
+      try {
+        const fee = await getGasFeesInEth()
+        setGasFee(fee || '0')
+      } catch (error) {
+        console.error('Failed to fetch gas fee:', error)
+        setGasFee('0')
+      }
+    }
+    fetchGasFee()
+    console.log(gasFee)
     const storedUser = localStorage.getItem('anonAadhaar');
     const user = storedUser ? JSON.parse(storedUser) : {};
     if (user && user.status === 'logged-in') {
@@ -136,7 +149,9 @@ export default function Dashboard() {
                     <UtilitiesGraph />
                   </CardContent>
                 </Card>
-                
+                <Card>
+                <GasFeeDisplay gasFee={gasFee}/>
+                </Card>
                 <Card onClick={() => navigate('air')}> 
                   <CardHeader>
                     <CardTitle>Air Quality Index</CardTitle>
@@ -169,32 +184,32 @@ export default function Dashboard() {
 
                 {/* New Payment Card */}
                 <Card onClick={() => navigate('pay')} className="p-4 space-y-4 shadow-md hover:shadow-lg transition-shadow">
-  <CardHeader>
-    <CardTitle className="text-xl font-bold text-center">Make a Payment</CardTitle>
-    <CardDescription className="text-center">Pay your bills or fines securely</CardDescription>
-  </CardHeader>
-  <CardContent className="space-y-6">
-    {/* Decorative Icons or Graphics */}
-    <div className="flex justify-center space-x-4 text-primary">
-      <CreditCard className="w-10 h-10" />
-      <Shield className="w-10 h-10" />
-      <TrendingUp className="w-10 h-10" />
-    </div>
+                  <CardHeader>
+                    <CardTitle className="text-xl font-bold text-center">Make a Payment</CardTitle>
+                    <CardDescription className="text-center">Pay your bills or fines securely</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {/* Decorative Icons or Graphics */}
+                    <div className="flex justify-center space-x-4 text-primary">
+                      <CreditCard className="w-10 h-10" />
+                      <Shield className="w-10 h-10" />
+                      <TrendingUp className="w-10 h-10" />
+                    </div>
 
-    {/* Text or Additional Information */}
-    <p className="text-sm text-center text-gray-600">
-      Use secure payment methods with encryption and protection for all transactions. 
-    </p>
-    <p className="text-sm text-center text-gray-600">
-      Accepted cards: Visa, Mastercard, Amex
-    </p>
+                    {/* Text or Additional Information */}
+                    <p className="text-sm text-center text-gray-600">
+                      Use secure payment methods with encryption and protection for all transactions. 
+                    </p>
+                    <p className="text-sm text-center text-gray-600">
+                      Accepted cards: Visa, Mastercard, Amex
+                    </p>
 
-    {/* Payment Button */}
-    <Button className="w-full">
-      <CreditCard className="mr-2 h-4 w-4" /> Pay Now
-    </Button>
-  </CardContent>
-</Card>
+                    {/* Payment Button */}
+                    <Button className="w-full">
+                      <CreditCard className="mr-2 h-4 w-4" /> Pay Now
+                    </Button>
+                  </CardContent>
+                </Card>
 
                 {/* New Crimes Card */}
                 <Card onClick={() => navigate('crime')}>

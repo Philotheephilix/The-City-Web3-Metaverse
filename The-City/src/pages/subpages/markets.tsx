@@ -8,84 +8,15 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import { format } from 'date-fns'
 import { ArrowUpRight, ArrowDownRight, Clock, Zap, Database, Blocks, Wallet, Activity } from 'lucide-react'
 import EnhancedCryptoDashboard from '../temp/coinapi'
-type Chain = 'ETH' | 'BASE' | "OPTI"
-
-const API_ENDPOINTS: Record<Chain, string> = {
-  ETH: "https://eth.blockscout.com/api/v2/stats/charts/market",
-  BASE: "https://base.blockscout.com/api/v2/stats/charts/market",
-  OPTI:"https://optimism.blockscout.com/api/v2/stats/charts/market"
-}
-
-const STATS_ENDPOINT: Record<Chain, string>  = {
-    ETH : "https://eth.blockscout.com/api/v2/stats",
-    BASE : "https://base.blockscout.com/api/v2/stats",
-    OPTI:"https://optimism.blockscout.com/api/v2/stats"
-
-}
-
-interface ChartData {
-  date: string
-  closing_price: string
-  market_cap: string
-}
-
-interface AnalyticsResponse {
-  available_supply: string
-  chart_data: ChartData[]
-}
-
-interface StatsData {
-  average_block_time: number
-  coin_price: string
-  coin_price_change_percentage: number
-  gas_prices: {
-    slow: number
-    average: number
-    fast: number
-  }
-  gas_used_today: string
-  market_cap: string
-  network_utilization_percentage: number
-  total_addresses: string
-  total_blocks: string
-  total_transactions: string
-  transactions_today: string
-}
-
+import { fetchAnalyticsData, fetchStatsData } from '../../utils/blockscout/Analytics'
+import { Chain,AnalyticsResponse,StatsData,ChartData } from '../../utils/blockscout/Types'
+import BlockScoutLogo from "../../assets/Blockscout.svg"
 export default function Component() {
   const [selectedChain, setSelectedChain] = useState<Chain>('ETH')
   const [analyticsData, setAnalyticsData] = useState<AnalyticsResponse | null>(null)
   const [statsData, setStatsData] = useState<StatsData | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
-
-  const fetchAnalyticsData = async (chain: Chain) => {
-    const endpoint = API_ENDPOINTS[chain]
-    try {
-      const response = await fetch(endpoint)
-      if (!response.ok) throw new Error('Network response was not ok')
-      const data: AnalyticsResponse = await response.json()
-      data.chart_data.reverse() // Reverse the data array here
-      return data
-    } catch (error) {
-      console.error("API call failed:", error)
-      setError(error instanceof Error ? error.message : 'An error occurred')
-      return null
-    }
-  }
-
-  const fetchStatsData = async (chain: Chain) => {
-    try {
-      const response = await fetch(STATS_ENDPOINT[chain])
-      if (!response.ok) throw new Error('Network response was not ok')
-      const data: StatsData = await response.json()
-      return data
-    } catch (error) {
-      console.error("Stats API call failed:", error)
-      setError(error instanceof Error ? error.message : 'An error occurred fetching stats')
-      return null
-    }
-  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -117,6 +48,7 @@ export default function Component() {
 
     return (
         <div className="flex justify-center  h-[500px]">
+          
           <ChartContainer
             config={{
               market_cap: {
@@ -126,7 +58,9 @@ export default function Component() {
             }}
             className="flex justify-center"
           >
+
             <ResponsiveContainer width="100%" height="100%">
+              
               <LineChart data={formatChartData(analyticsData.chart_data)} className="m-auto">
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                 <XAxis dataKey="date" stroke="hsl(var(--foreground))" />
@@ -183,9 +117,17 @@ export default function Component() {
   return (
     <div className="container mx-auto p-4 dark">
       <Card className="w-full bg-background text-foreground mb-10">
-        <CardHeader>
-          <CardTitle>Blockchain Analytics</CardTitle>
+
+        <CardHeader className='flex flex-row  align-center justify-evenly w-[90vw]'>
+          <div className='w-6'></div>
+          <div>
+          <CardTitle className='text-xl'>Blockchain Analytics</CardTitle>
           <CardDescription>Market cap analysis and statistics for different cryptocurrencies</CardDescription>
+          </div>
+          <div className=' flex w-[max-content] flex-col align-center top-0 right-0 m-2 border border-slate-600 rounded p-2 bg-grey-800'>
+            <span className='text-xs'>Powered By</span>
+            <img src={BlockScoutLogo} alt="" />
+          </div>
         </CardHeader>
         <CardContent>
           <Select

@@ -1,63 +1,14 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import axios from "axios"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, AreaChart, Area, Cell } from "recharts"
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, LineChart, Line, Cell } from "recharts"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { ArrowDownIcon, ArrowUpIcon } from "lucide-react"
+import { OrderBook,Quote } from '../../utils/coinapi/Types'
+import { fetchOrderBook, fetchQuote } from "@/utils/coinapi/CryptoDashboard"
 
-const API_KEY = '92080a06-9fbe-42ff-9cfd-425bf6709458'
-
-interface LastTrade {
-  price: number
-  size: number
-  taker_side: "BUY" | "SELL"
-}
-
-interface OrderBookEntry {
-  id: string
-  price: number
-  size: number
-}
-
-interface OrderBook {
-  bids: OrderBookEntry[]
-  asks: OrderBookEntry[]
-}
-
-interface Quote {
-  symbol_id: string
-  ask_price: number
-  ask_size: number
-  bid_price: number
-  bid_size: number
-  last_trade: LastTrade
-  time_coinapi: string
-  time_exchange: string
-  uuid: string
-}
-
-const fetchOrderBook = async (): Promise<OrderBook> => {
-  const response = await axios.get('https://rest.coinapi.io/v1/orderbooks3/COINBASE_SPOT_BCH_USD/current', {
-    headers: {
-      'X-CoinAPI-Key': API_KEY,
-      'Accept': 'application/json',
-    },
-  })
-  return response.data
-}
-
-const fetchQuote = async (): Promise<Quote[]> => {
-  const response = await axios.get('https://rest.coinapi.io/v1/quotes/current?filter_symbol_id=BITSTAMP_SPOT_BTC_USD', {
-    headers: {
-      'X-CoinAPI-Key': API_KEY,
-      'Accept': 'application/json',
-    },
-  })
-  return response.data
-}
 
 export default function EnhancedCryptoDashboard() {
   const [orderBook, setOrderBook] = useState<OrderBook | null>(null)

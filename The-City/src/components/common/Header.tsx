@@ -13,6 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import MetaMaskButton from "@/utils/metamask/MetamaskPublicStore"
 
 export default function Header() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -46,8 +47,8 @@ export default function Header() {
                     </Button>
                     <h1 className="text-2xl font-bold text-gray-800 dark:text-white ">THOONGA NAGARAM - The City</h1>
                 </div>
-                <div className="flex items-center space-x-4">
-                    
+                <div className="flex items-center space-x-4 gap-2">
+                    <MetaMaskButton/> 
                     {isLoggedIn ? (
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
+import NovesLogo from '../../assets/NovesLogo.svg'
 
 const API_KEY = "cqt_rQP7QrcrkRVPtVFc6vCPxcKYQBpk";
 const NOVES_API_KEY = import.meta.env.VITE_NOVES_TRANSLATE_API_KEY;
@@ -153,17 +154,17 @@ const fetchTransactionDetails = async (hash: string): Promise<TransactionDetails
   if (!analyticsData && !transactions.length) return <div>Error loading data.</div>;
 
   return (
-    <div className="container mx-auto p-4 space-y-6 bg-black text-white">
+    <div className="container mx-auto p-4 space-y-6 dark text-white">
       {/* Address and Update Info */}
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-        <div className="p-6 bg-black">
+      <div className="dark rounded-lg shadow-lg overflow-hidden">
+        <div className="p-6 dark">
           <div className="flex items-center justify-center gap-8">
             <div>
               <h1 className="text-2xl font-bold text-white">Transaction History & Analytics</h1>
               <p className="mt-2 text-sm text-blue-600">Address: {address}</p>
             </div>
-            <Button  className="px-4 py-2 bg-slate-900 border-white text-white rounded-md hover:bg-slate-800 transition-colors">
-              NOVES API
+            <Button  className="px-4 py-4 w-32 bg-black border-white text-white rounded-md  hover:bg-black">
+              <img src={NovesLogo} alt="" />
             </Button>
           </div>
         </div>
@@ -207,7 +208,7 @@ const fetchTransactionDetails = async (hash: string): Promise<TransactionDetails
               </table>
             </div>
           ) : (
-            <div className="text-center text-gray-400">No transaction data available.</div>
+            <div className="text-center text-white">No transaction data available.</div>
           )}
         </div>
       </div>
