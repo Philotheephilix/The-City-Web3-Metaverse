@@ -22,6 +22,7 @@ import EnergyUsage from './EnergyUsage'
 import DataAnalytics from './DataAnalytics'
 import axios from "axios";
 import {getGasFeesInEth} from '../../utils/quicknode/GasEstimation'
+import ExchangeRate from "../subpages/Exchange"
 interface Transaction {
   transactionHash: string;
   blockNumber: number;
@@ -283,6 +284,11 @@ export default function Dashboard() {
                   </CardContent>
                 </Card>
               </div>
+              <Card>
+                <CardContent>
+                  <ExchangeRate/>
+                </CardContent>
+              </Card>
 
               {/* Financial Module */}
               <Card>

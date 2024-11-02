@@ -47,7 +47,7 @@ const MetaMaskButton = () => {
   };
 
   return (
-    <div className="flex flex-col items-center gap-2 border border-2 border-slate-900 rounded-lg hover:border-slate-400">
+    <div className="flex flex-col items-center gap-2 border border-2 border-slate-800 rounded-lg hover:border-slate-400">
       <button
         onClick={connectWallet}
         disabled={isConnecting || isConnected}
@@ -59,15 +59,14 @@ const MetaMaskButton = () => {
             ? 'bg-black text-white hover:bg-gray-800' 
             : 'bg-black text-black hover:bg-slate-900'
           }
-          disabled:opacity-70 disabled:cursor-not-allowed
+          disabled:opacity-100 disabled:cursor-not-allowed
         `}
       >
-        <img className='h-8 ' src={MetamaskLogo} alt="" />
 
         <span className='text-white'>
           {isConnecting ? 'Connecting...' : 
            isConnected ? `Connected: ${account.slice(0,6)}...${account.slice(-4)}` : 
-           'Connect MetaMask'}
+           'Connect Wallet'}
         </span>
       </button>
     </div>

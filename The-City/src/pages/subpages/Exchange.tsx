@@ -35,10 +35,12 @@ const ExchangeRate: React.FC = () => {
     return <div className="text-center">No data available</div>; 
   }
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+    <div className="  flex items-center justify-center  w-full" >
       <CurrencyDashboard
               rates={data.rates}
               fetchedAt={data.fetchedAt} fetched_at={data.fetchedAt}      />
+
+
     </div>
   );
 };
