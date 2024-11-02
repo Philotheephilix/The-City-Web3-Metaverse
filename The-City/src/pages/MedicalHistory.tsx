@@ -250,10 +250,10 @@ export default function CreativeMedicalRecordsPage() {
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
           onClick={() => setShowQR(false)}
         >
-          <div className="bg-white p-6 rounded-lg text-center" onClick={e => e.stopPropagation()}>
-            <h2 className="text-2xl font-bold mb-4">Share Your Health Journey</h2>
+          <div className="bg-black p-6 rounded-lg flex flex-col items-center align-center justify-center text-center" onClick={e => e.stopPropagation()}>
+            <h2 className="text-2xl text-white font-bold mb-4">Share Your Health Journey</h2>
             <QRCodeCanvas value="https://cityverse-health.example.com/share" size={200} />
-            <p className="mt-4 text-lg font-semibold">Scan Me</p>
+            <p className="mt-4 text-lg text-white font-semibold">Scan Me</p>
           </div>
         </motion.div>
       )}
