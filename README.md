@@ -2,7 +2,7 @@
 A decentralized and transparent platform for enhancing government transparency and citizen engagement through privacy-focused blockchain technology.
 
 ---
-### DEPLOYMENT MAYBE RANDOMLY LOSE DATABASE CONNECTIVITY REFRESH THE PAGE (15-20pages), IF DATA IS MISSING 
+### DEPLOYMENT MAYBE RANDOMLY LOSE DATABASE CONNECTIVITY REFRESH THE PAGE (15-20times), IF DATA IS MISSING 
 
 ## 📖 Project Overview
 **Thoonga Nagaram** is a pioneering platform designed to facilitate transparency in government actions and enable privacy-centric, decentralized citizen data management. By leveraging zero-knowledge (ZK) technology and anonymous protocols, Thoonga Nagaram allows citizens to manage grievances, monitor government expenditures, and interact with services without compromising privacy.
