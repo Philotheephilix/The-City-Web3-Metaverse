@@ -2,6 +2,7 @@
 A decentralized and transparent platform for enhancing government transparency and citizen engagement through privacy-focused blockchain technology.
 
 ---
+### DEPLOYMENT MAYBE RANDOMLY LOSE DATABASE CONNECTIVITY REFRESH THE PAGE (15-20pages), IF DATA IS MISSING 
 
 ## 📖 Project Overview
 **Thoonga Nagaram** is a pioneering platform designed to facilitate transparency in government actions and enable privacy-centric, decentralized citizen data management. By leveraging zero-knowledge (ZK) technology and anonymous protocols, Thoonga Nagaram allows citizens to manage grievances, monitor government expenditures, and interact with services without compromising privacy.
@@ -42,7 +43,30 @@ Thoonga Nagaram aims to address several pressing issues in government transparen
 - **Backend & Database:** Express.js, MongoDB Atlas, IPFS
 - **Additional Tools & Integrations:** QuickNode (Functions, Streams, Gas Fees API), Covalent Gold Rush, Blockscout, CoinAPI
 
----
+## DISCLAIMER: Deployed site in on VERCEL which lacks mongodb connectivity so site may loose backend conectivity initially Refreshing the site 10-15 times will revive the server 
+
+## Installation
+Clone the repo to local by running
+```bash
+git clone https://github.com/Philotheephilix/The-City-Web3-Metaverse
+```
+### Frontend
+- Run  
+```bash
+cd The-City
+```
+- Install all Depedencies and start development environment
+```bash
+bun install && bun run dev
+```
+### Backend
+Install mongoDb on System and create a database named thoonga_nagaram and create collections and add sample data from /server/jsons/
+- Install all dependencies and start server
+```bash
+bun install && bun start
+```
+### Configuration
+- Change backend url to expressjs deployed above in constants.tsx file in /The-City/src/constants.tsx
 
 ## 🔗 Links
 - **Live Demo:** [The City Web3 Metaverse](https://the-city-web3-metaverse.vercel.app/)
